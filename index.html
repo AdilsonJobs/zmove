@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Z-Move — Move anything. Across any cloud.</title>
+  <meta name="description" content="Z-Move is an agentless multi-cloud migration platform. Move workloads between Zadara, AWS and Azure — fast, secure, and without complexity." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #07080f;
+      --bg2:      #0d0f1a;
+      --bg3:      #12152a;
+      --surface:  #161929;
+      --border:   rgba(255,255,255,0.07);
+      --blue:     #3b82f6;
+      --blue-dim: #1d4ed8;
+      --cyan:     #06b6d4;
+      --purple:   #8b5cf6;
+      --glow:     rgba(59,130,246,0.18);
+      --text:     #f0f2ff;
+      --muted:    #8891b4;
+      --mono:     'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue-dim); border-radius: 4px; }
+
+    /* ── Utilities ── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .mono { font-family: var(--mono); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 24px;
+      background: rgba(7,8,15,0.72);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em;
+      background: linear-gradient(90deg, #60a5fa, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .logo span { font-weight: 300; opacity: .7; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn-nav {
+      padding: 8px 20px; border-radius: 8px; font-size: .875rem; font-weight: 600;
+      background: var(--blue); color: #fff; border: none; cursor: pointer;
+      text-decoration: none; transition: background .2s, box-shadow .2s;
+    }
+    .btn-nav:hover { background: #2563eb; box-shadow: 0 0 20px rgba(59,130,246,0.4); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: .04;
+      background-image:
+        linear-gradient(var(--blue) 1px, transparent 1px),
+        linear-gradient(90deg, var(--blue) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-glow {
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 600px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(59,130,246,0.35);
+      background: rgba(59,130,246,0.08);
+      font-size: .78rem; font-weight: 600; color: #93c5fd;
+      letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #60a5fa; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+
+    h1 {
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 900; letter-spacing: -0.04em; line-height: 1.05;
+      margin-bottom: 24px;
+    }
+    h1 .accent {
+      background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--muted); max-width: 480px;
+      line-height: 1.7; margin-bottom: 40px;
+    }
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 56px; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px; border-radius: 10px; font-size: .95rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: #fff; border: none; cursor: pointer; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(59,130,246,0.4); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px; border-radius: 10px; font-size: .95rem; font-weight: 600;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
+
+    .hero-stats {
+      display: flex; gap: 32px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 2px; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--text); }
+    .stat-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+    /* Terminal card */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .terminal-bar {
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .terminal-title { margin-left: auto; margin-right: auto; font-size: .78rem; color: var(--muted); font-family: var(--mono); }
+    .terminal-body { padding: 24px; font-family: var(--mono); font-size: .82rem; line-height: 1.9; }
+    .t-muted { color: var(--muted); }
+    .t-blue { color: #60a5fa; }
+    .t-green { color: #4ade80; }
+    .t-yellow { color: #fbbf24; }
+    .t-purple { color: #c084fc; }
+    .t-cyan { color: #22d3ee; }
+    .t-bar {
+      display: flex; align-items: center; gap: 8px; margin: 12px 0 4px;
+    }
+    .progress-track { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--blue), var(--cyan)); animation: fill 2.5s ease forwards; }
+    @keyframes fill { from{width:0} to{width:100%} }
+    .t-shimmer { animation: shimmer 3s ease-in-out infinite; }
+    @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+    /* ── PROOF BAR ── */
+    .proof-bar {
+      padding: 20px 24px;
+      background: rgba(59,130,246,0.06);
+      border-top: 1px solid rgba(59,130,246,0.12);
+      border-bottom: 1px solid rgba(59,130,246,0.12);
+    }
+    .proof-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .proof-item { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--muted); }
+    .proof-icon { font-size: 1rem; }
+    .proof-item strong { color: var(--text); font-weight: 600; }
+
+    /* ── SECTION ── */
+    section { padding: 100px 24px; }
+    .section-label {
+      display: inline-block;
+      font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 16px;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--muted); max-width: 560px; line-height: 1.7;
+    }
+    .section-head { margin-bottom: 64px; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section { background: var(--bg2); }
+    .steps {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 0; position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute; top: 28px; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      z-index: 0;
+    }
+    .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 800; font-family: var(--mono);
+      background: var(--surface);
+      border: 2px solid var(--blue);
+      color: var(--blue);
+      margin-bottom: 20px;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    }
+    .step h3 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 32px;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+      cursor: default;
+    }
+    .feature-card:hover {
+      border-color: rgba(59,130,246,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 20px var(--glow);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: rgba(59,130,246,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 20px;
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { font-size: .875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── CLOUDS ── */
+    .clouds-section { background: var(--bg2); }
+    .clouds-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 700px;
+    }
+    .cloud-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 36px 24px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 14px; text-align: center;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .cloud-card:hover { border-color: rgba(59,130,246,0.3); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+    .cloud-logo { font-size: 2.4rem; }
+    .cloud-card h3 { font-size: 1rem; font-weight: 700; }
+    .cloud-card p { font-size: .8rem; color: var(--muted); }
+
+    /* ── USE CASES ── */
+    .usecases-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+    }
+    .usecase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 32px;
+      display: flex; gap: 20px;
+      transition: border-color .3s;
+    }
+    .usecase-card:hover { border-color: rgba(59,130,246,0.25); }
+    .usecase-icon {
+      width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(59,130,246,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .usecase-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .usecase-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── METRICS ── */
+    .metrics-section { background: var(--bg2); }
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 64px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 32px 24px; text-align: center;
+    }
+    .metric-num {
+      font-size: 2.6rem; font-weight: 900; letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .metric-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; font-weight: 600; }
+    .cases-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+    }
+    .case-tag {
+      display: inline-block; padding: 4px 10px; border-radius: 6px;
+      font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      background: rgba(59,130,246,0.15); color: #93c5fd; margin-bottom: 16px;
+    }
+    .case-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; }
+    .case-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: .85rem; }
+    .case-row:last-child { border-bottom: none; }
+    .case-row span:first-child { color: var(--muted); }
+    .case-row span:last-child { font-weight: 600; color: #4ade80; }
+
+    /* ── PRICING ── */
+    .pricing-wrap {
+      display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px 40px;
+      width: 340px; text-align: center;
+      position: relative;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .pricing-card.featured {
+      border-color: rgba(59,130,246,0.4);
+      background: linear-gradient(160deg, rgba(59,130,246,0.06) 0%, var(--surface) 60%);
+      box-shadow: 0 0 40px rgba(59,130,246,0.1);
+    }
+    .featured-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff; font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+      padding: 5px 16px; border-radius: 100px; text-transform: uppercase;
+    }
+    .pricing-name { font-size: .85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+    .pricing-price { font-size: 3.2rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 4px; }
+    .pricing-price span { font-size: 1.2rem; font-weight: 400; color: var(--muted); }
+    .pricing-desc { font-size: .85rem; color: var(--muted); margin-bottom: 32px; }
+    .pricing-features { list-style: none; text-align: left; margin-bottom: 36px; }
+    .pricing-features li { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: .875rem; border-bottom: 1px solid var(--border); }
+    .pricing-features li:last-child { border-bottom: none; }
+    .check { color: #4ade80; font-weight: 700; }
+    .btn-pricing {
+      display: block; width: 100%; padding: 14px; border-radius: 10px;
+      font-size: .95rem; font-weight: 700; text-align: center; text-decoration: none;
+      cursor: pointer; border: none; transition: all .2s;
+    }
+    .btn-pricing.primary {
+      background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff;
+    }
+    .btn-pricing.primary:hover { box-shadow: 0 8px 24px rgba(59,130,246,0.35); transform: translateY(-1px); }
+    .btn-pricing.outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-pricing.outline:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+
+    /* ── SECURITY ── */
+    .security-section { background: var(--bg2); }
+    .security-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    }
+    .security-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 28px 24px; text-align: center;
+    }
+    .security-icon { font-size: 2rem; margin-bottom: 16px; }
+    .security-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; }
+    .security-card p { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── FINAL CTA ── */
+    .cta-section {
+      text-align: center; padding: 120px 24px;
+      background: radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 70%);
+    }
+    .cta-section h2 { max-width: 600px; margin: 0 auto 20px; }
+    .cta-section p { color: var(--muted); max-width: 500px; margin: 0 auto 40px; font-size: 1.05rem; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 24px 32px;
+    }
+    .footer-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo {
+      font-size: 1.1rem; font-weight: 800;
+      background: linear-gradient(90deg, #60a5fa, #818cf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--muted); font-size: .8rem; }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .terminal { max-width: 560px; }
+      .steps { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+      .steps::before { display: none; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .security-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 72px 20px; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .usecases-grid { grid-template-columns: 1fr; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .clouds-grid { grid-template-columns: repeat(3, 1fr); max-width: 100%; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .security-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-stats { flex-wrap: wrap; gap: 20px; }
+      .proof-inner { gap: 20px; }
+    }
+    @media (max-width: 480px) {
+      .steps { grid-template-columns: 1fr; }
+      .clouds-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .security-grid { grid-template-columns: 1fr; }
+      .pricing-card { width: 100%; padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="logo">Z<span>-</span>Move</a>
+      <ul class="nav-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#metrics">Proof</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact" class="btn-nav">Get Started</a></li>
+      </ul>
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="badge">
+          <div class="badge-dot"></div>
+          Cloud Mobility Platform
+        </div>
+        <h1>Move anything.<br><span class="accent">Across any cloud.</span></h1>
+        <p class="hero-sub">
+          Z-Move is an agentless multi-cloud migration platform that lets you move workloads between Zadara, AWS and Azure — fast, secure, and without complexity.
+        </p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Start Migration
+          </a>
+          <a href="#how" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M6 5.5L10.5 8L6 10.5V5.5Z" fill="currentColor"/></svg>
+            See how it works
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">19</span>
+            <span class="stat-label">Real migrations</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">7</span>
+            <span class="stat-label">Zero-touch runs</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">$0.05</span>
+            <span class="stat-label">Per GB</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">0</span>
+            <span class="stat-label">Agents needed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="terminal-title">zmove — migration-job-447</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-muted">$</span> <span class="t-blue">zmove</span> start --source aws-us-east --target zadara-eu</div>
+          <div class="t-muted">─────────────────────────────────────────</div>
+          <div><span class="t-green">✓</span> Source authenticated <span class="t-muted">· AWS us-east-1</span></div>
+          <div><span class="t-green">✓</span> Target authenticated <span class="t-muted">· Zadara EU-West</span></div>
+          <div><span class="t-yellow">⟳</span> Provisioning ephemeral workers<span class="t-shimmer">...</span></div>
+          <div><span class="t-green">✓</span> Workers online <span class="t-muted">· 2 nodes · auto-destroy on</span></div>
+          <div><span class="t-muted">─────────────────────────────────────────</span></div>
+          <div><span class="t-cyan">i</span> Workload: <span class="t-purple">SAP HANA</span> <span class="t-muted">· 7 disks · 1.2 TB</span></div>
+          <div class="t-bar">
+            <span class="t-green" style="font-size:.75rem">streaming</span>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <span class="t-green" style="font-size:.75rem">100%</span>
+          </div>
+          <div><span class="t-green">✓</span> Transfer complete <span class="t-muted">· 253 min · 0 errors</span></div>
+          <div><span class="t-green">✓</span> Workload rebuilt in target cloud</div>
+          <div><span class="t-green">✓</span> Ephemeral workers destroyed</div>
+          <div class="t-muted">─────────────────────────────────────────</div>
+          <div><span class="t-green">✓</span> <strong style="color:#f0f2ff">Migration complete.</strong> <span class="t-muted">No agents. No residue.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF BAR -->
+  <div class="proof-bar">
+    <div class="proof-inner">
+      <div class="proof-item"><span class="proof-icon">🏭</span> <span>Battle-tested with <strong>SAP HANA</strong> in production</span></div>
+      <div class="proof-item"><span class="proof-icon">🔄</span> <span><strong>Bidirectional</strong> cloud mobility</span></div>
+      <div class="proof-item"><span class="proof-icon">⚡</span> <span>SQL Server migrated in <strong>97 minutes</strong></span></div>
+      <div class="proof-item"><span class="proof-icon">🌍</span> <span><strong>Intercontinental</strong> migrations tested</span></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <div class="section-head fade-up">
+        <span class="section-label">Process</span>
+        <h2>Migration in 5 steps</h2>
+        <p class="section-sub">From credentials to a live workload in the target cloud — fully automated, zero agents.</p>
+      </div>
+      <div class="steps fade-up">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Connect</h3>
+          <p>Authenticate using API credentials. No SSH access, no software installs.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Select</h3>
+          <p>Choose VMs, snapshots or disk images from your source cloud.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Launch</h3>
+          <p>Z-Move provisions ephemeral workers in both source and target regions.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>Stream</h3>
+          <p>Disk data is transferred and reconstructed in the target cloud in parallel.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">05</div>
+          <h3>Cleanup</h3>
+          <p>All migration infrastructure is automatically destroyed. Zero residual cost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-head fade-up">
+        <span class="section-label">Why Z-Move</span>
+        <h2>Built different.<br>On purpose.</h2>
+        <p class="section-sub">Every design decision was made to remove friction and eliminate risk from cloud migrations.</p>
+      </div>
+      <div class="features-grid fade-up">
+        <div class="feature-card">
+          <div class="feature-icon">🚫</div>
+          <h3>Agentless by design</h3>
+          <p>Zero software deployed inside your VMs. No agents to install, update, or manage. Your workloads stay untouched throughout the entire process.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Ephemeral infrastructure</h3>
+          <p>Workers are created per migration job and auto-destroyed on completion. No persistent compute, no lingering resources, no unexpected costs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>True multi-cloud mobility</h3>
+          <p>Move freely between Zadara, AWS, and Azure in any direction. No vendor lock-in baked into the architecture.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💸</div>
+          <h3>Pay only for data moved</h3>
+          <p>Simple, transparent pricing at $0.05/GB. No setup fees, no subscriptions, no idle charges. Start free and scale as you go.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <h3>Enterprise-ready security</h3>
+          <p>Fernet-encrypted credential storage, role-based access control, and full audit logs. Multi-tenant architecture from the ground up.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <h3>Parallel migration engine</h3>
+          <p>Multi-disk, multi-stream architecture transfers data at maximum throughput. Built on FastAPI with Redis-backed job orchestration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORTED CLOUDS -->
+  <section class="clouds-section" id="clouds">
+    <div class="container">
+      <div class="section-head fade-up">
+        <span class="section-label">Supported Clouds</span>
+        <h2>Wherever you are.<br>Wherever you're going.</h2>
+      </div>
+      <div class="clouds-grid fade-up">
+        <div class="cloud-card">
+          <div class="cloud-logo">⚡</div>
+          <h3>Zadara</h3>
+          <p>Private cloud & storage-as-a-service</p>
+        </div>
+        <div class="cloud-card">
+          <div class="cloud-logo">☁️</div>
+          <h3>AWS</h3>
+          <p>Amazon Web Services — all major regions</p>
+        </div>
+        <div class="cloud-card">
+          <div class="cloud-logo">🔷</div>
+          <h3>Azure</h3>
+          <p>Microsoft Azure — enterprise workloads</p>
+        </div>
+      </div>
+      <p style="margin-top:32px; color:var(--muted); font-size:.875rem;">
+        More providers coming soon. GCP, OVH, and private infrastructure in the roadmap.
+      </p>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section id="usecases">
+    <div class="container">
+      <div class="section-head fade-up">
+        <span class="section-label">Use Cases</span>
+        <h2>Every reason to move.</h2>
+        <p class="section-sub">From cost savings to compliance — Z-Move handles the full spectrum of cloud mobility needs.</p>
+      </div>
+      <div class="usecases-grid fade-up">
+        <div class="usecase-card">
+          <div class="usecase-icon">🚪</div>
+          <div>
+            <h3>Cloud Exit</h3>
+            <p>Escape hyperscaler pricing without operational pain. Move your entire stack to a more cost-effective provider with zero downtime impact.</p>
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">🛡️</div>
+          <div>
+            <h3>Disaster Recovery</h3>
+            <p>Build a cross-cloud replication strategy that doesn't depend on a single vendor's availability or pricing model.</p>
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">💰</div>
+          <div>
+            <h3>Cost Optimization</h3>
+            <p>Move workloads to environments with better price-performance ratios. Pay for infrastructure that fits your actual needs.</p>
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">🌍</div>
+          <div>
+            <h3>Data Sovereignty</h3>
+            <p>Control exactly where your data lives. Move to providers that meet your regulatory and geographic data placement requirements.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REAL-WORLD PROOF -->
+  <section class="metrics-section" id="metrics">
+    <div class="container">
+      <div class="section-head fade-up">
+        <span class="section-label">Battle-tested</span>
+        <h2>Real migrations.<br>Real workloads.</h2>
+        <p class="section-sub">Not a demo environment. These numbers come from production migrations of enterprise-grade systems.</p>
+      </div>
+      <div class="metrics-grid fade-up">
+        <div class="metric-card">
+          <div class="metric-num">19</div>
+          <div class="metric-label">Migrations completed</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">10</div>
+          <div class="metric-label">Production workloads</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">7</div>
+          <div class="metric-label">Zero-touch runs</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">100%</div>
+          <div class="metric-label">Data integrity</div>
+        </div>
+      </div>
+      <div class="cases-grid fade-up">
+        <div class="case-card">
+          <div class="case-tag">SAP HANA</div>
+          <h3>Enterprise ERP migration</h3>
+          <div class="case-row"><span>Disks transferred</span><span>7 volumes</span></div>
+          <div class="case-row"><span>Duration</span><span>253 minutes</span></div>
+          <div class="case-row"><span>Errors</span><span>0</span></div>
+          <div class="case-row"><span>Agents required</span><span>None</span></div>
+        </div>
+        <div class="case-card">
+          <div class="case-tag">SQL Server</div>
+          <h3>Enterprise database migration</h3>
+          <div class="case-row"><span>Duration</span><span>97 minutes</span></div>
+          <div class="case-row"><span>Data integrity</span><span>100%</span></div>
+          <div class="case-row"><span>Post-migration issues</span><span>0</span></div>
+          <div class="case-row"><span>Downtime</span><span>Near-zero</span></div>
+        </div>
+        <div class="case-card">
+          <div class="case-tag">Web Infrastructure</div>
+          <h3>Full stack workload move</h3>
+          <div class="case-row"><span>Data integrity</span><span>100%</span></div>
+          <div class="case-row"><span>Downtime</span><span>Zero relevant</span></div>
+          <div class="case-row"><span>Migration type</span><span>Intercontinental</span></div>
+          <div class="case-row"><span>Touch points</span><span>Zero</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-head fade-up" style="text-align:center">
+        <span class="section-label">Pricing</span>
+        <h2>Simple. Honest. No lock-in.</h2>
+        <p class="section-sub" style="margin:0 auto">Pay only for what you move. No subscriptions, no setup fees, no idle charges.</p>
+      </div>
+      <div class="pricing-wrap fade-up">
+        <div class="pricing-card">
+          <div class="pricing-name">Pay as you go</div>
+          <div class="pricing-price">$0.05 <span>/ GB</span></div>
+          <div class="pricing-desc">Perfect for one-off migrations and teams that want full cost control.</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> No minimum commitment</li>
+            <li><span class="check">✓</span> All cloud providers</li>
+            <li><span class="check">✓</span> Ephemeral workers included</li>
+            <li><span class="check">✓</span> Full audit logs</li>
+            <li><span class="check">✓</span> API access</li>
+          </ul>
+          <a href="#contact" class="btn-pricing outline">Start for free</a>
+        </div>
+        <div class="pricing-card featured">
+          <div class="featured-badge">Most Popular</div>
+          <div class="pricing-name">Enterprise</div>
+          <div class="pricing-price" style="font-size:2rem;padding-top:4px">Custom</div>
+          <div class="pricing-desc">For MSPs, cloud providers, and large-scale migrations with SLA requirements.</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Volume pricing</li>
+            <li><span class="check">✓</span> Private deployment</li>
+            <li><span class="check">✓</span> White-label option</li>
+            <li><span class="check">✓</span> Dedicated SLA</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <a href="#contact" class="btn-pricing primary">Talk to us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section class="security-section" id="security">
+    <div class="container">
+      <div class="section-head fade-up" style="text-align:center">
+        <span class="section-label">Security</span>
+        <h2>Security isn't an add-on.<br>It's the foundation.</h2>
+      </div>
+      <div class="security-grid fade-up">
+        <div class="security-card">
+          <div class="security-icon">🔑</div>
+          <h3>Encrypted credentials</h3>
+          <p>All cloud credentials encrypted with Fernet symmetric encryption. Never stored in plaintext.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">💨</div>
+          <h3>Zero persistent compute</h3>
+          <p>Ephemeral workers are destroyed after every job. No persistent attack surface.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">👥</div>
+          <h3>Role-based access</h3>
+          <p>RBAC with full multi-tenant isolation. Each organization's data stays completely separate.</p>
+        </div>
+        <div class="security-card">
+          <div class="security-icon">📋</div>
+          <h3>Full audit trail</h3>
+          <p>Every migration action logged. Complete visibility into who did what, when, and where.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <span class="section-label">Get started</span>
+      <h2>Start moving your workloads today.</h2>
+      <p>No agents. No lock-in. Just movement. Join the teams already running production migrations on Z-Move.</p>
+      <div class="cta-btns">
+        <a href="mailto:hello@zmove.io" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4l6 4.5L14 4M2 4h12v9H2V4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Request a demo
+        </a>
+        <a href="mailto:hello@zmove.io" class="btn-secondary">Contact sales</a>
+      </div>
+      <p style="margin-top:40px; font-size:.8rem; color:var(--muted);">
+        No credit card required. Setup takes minutes.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Z-Move</div>
+      <ul class="footer-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="footer-copy">© 2025 Z-Move. No agents. No lock-in. Just movement.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Mobile menu toggle
+    function toggleMenu() {
+      const links = document.querySelector('.nav-links');
+      const isOpen = links.style.display === 'flex';
+      links.style.display = isOpen ? 'none' : 'flex';
+      links.style.flexDirection = 'column';
+      links.style.position = 'absolute';
+      links.style.top = '64px';
+      links.style.left = '0';
+      links.style.right = '0';
+      links.style.background = 'rgba(7,8,15,0.98)';
+      links.style.padding = '20px 24px 24px';
+      links.style.borderBottom = '1px solid rgba(255,255,255,0.07)';
+      if (!isOpen) links.style.display = 'flex';
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Animate stat numbers on scroll
+    function animateCounter(el, target, suffix = '') {
+      let current = 0;
+      const step = target / 40;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = (suffix === '%' ? Math.round(current) : (Number.isInteger(target) ? Math.round(current) : current.toFixed(2))) + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 30);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const nums = entry.target.querySelectorAll('.metric-num');
+          nums.forEach(num => {
+            const text = num.textContent.trim();
+            if (text === '100%') animateCounter(num, 100, '%');
+            else if (!isNaN(parseInt(text))) animateCounter(num, parseInt(text));
+          });
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const metricsGrid = document.querySelector('.metrics-grid');
+    if (metricsGrid) statsObserver.observe(metricsGrid);
+  </script>
+</body>
+</html>
