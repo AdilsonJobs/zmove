@@ -11,6 +11,7 @@
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data:;
+    media-src 'self';
     connect-src 'none';
     frame-ancestors 'none';
     base-uri 'self';
@@ -217,11 +218,20 @@
     .video-thumb { width: 100%; height: 100%; overflow: hidden; position: relative; }
     .video-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 
-    /* ── PROOF SCREENSHOT ── */
-    .proof-screenshot { margin-top: 52px; }
-    .proof-screenshot img { width: 100%; border-radius: 12px; border: 1px solid var(--border2); box-shadow: 0 16px 48px rgba(0,0,0,0.45); display: block; }
-    .proof-screenshot figcaption { margin-top: 14px; text-align: center; font-size: .78rem; color: var(--muted); line-height: 1.6; }
-    .proof-screenshot figcaption strong { color: var(--text); }
+    /* ── APP FRAME (product screenshots) ── */
+    .app-frame { margin-top: 52px; }
+    .app-chrome { background: #1a1d2e; border: 1px solid var(--border2); border-bottom: none; border-radius: 12px 12px 0 0; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+    .chrome-dots { display: flex; gap: 6px; flex-shrink: 0; }
+    .chrome-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .chrome-dot.r { background: #ff5f57; } .chrome-dot.y { background: #febc2e; } .chrome-dot.g { background: #28c840; }
+    .chrome-title { font-size: .72rem; color: var(--muted); font-family: var(--mono); flex: 1; text-align: center; padding-right: 36px; }
+    .app-frame > img { width: 100%; display: block; border: 1px solid var(--border2); border-radius: 0 0 12px 12px; box-shadow: 0 16px 48px rgba(0,0,0,0.45); }
+    .app-frame figcaption { margin-top: 14px; text-align: center; font-size: .78rem; color: var(--muted); line-height: 1.6; }
+    .app-frame figcaption strong { color: var(--text); }
+
+    /* ── DASHBOARD PREVIEW ── */
+    .dashboard-preview { padding: 0 24px 80px; }
+    .dashboard-preview .app-frame { margin-top: 0; }
     .play-btn {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       width: 72px; height: 72px; border-radius: 50%;
@@ -604,6 +614,17 @@
     </div>
   </div>
 
+  <div class="dashboard-preview container">
+    <figure class="app-frame fade-up">
+      <div class="app-chrome">
+        <div class="chrome-dots"><span class="chrome-dot r"></span><span class="chrome-dot y"></span><span class="chrome-dot g"></span></div>
+        <span class="chrome-title">zmove.io — Dashboard · Migration Service Operational Overview</span>
+      </div>
+      <img src="assets/zmove_image/dashboard.png" alt="Z-Move dashboard — 29 migrations, 100% success rate, real-time activity" />
+      <figcaption><strong>The dashboard your team sees.</strong> Real-time status, 7-day activity, and full migration history — all in one view.</figcaption>
+    </figure>
+  </div>
+
   <!-- VIDEO DEMO -->
   <section class="demo-section" id="demo">
     <div class="container">
@@ -808,7 +829,11 @@
           <div class="case-row"><span>Type</span><span>Intercontinental</span></div>
         </div>
       </div>
-      <figure class="proof-screenshot fade-up">
+      <figure class="app-frame fade-up">
+        <div class="app-chrome">
+          <div class="chrome-dots"><span class="chrome-dot r"></span><span class="chrome-dot y"></span><span class="chrome-dot g"></span></div>
+          <span class="chrome-title">Zadara Cloud — Events · 17-Apr-26 · 42 Items</span>
+        </div>
         <img src="assets/zmove_image/zadara_zmove_events.png" alt="Zadara event log — 42 infrastructure events auto-destroyed after production migration" />
         <figcaption><strong>42 infrastructure events.</strong> Every ephemeral worker, volume, network interface, and elastic IP automatically destroyed after migration — zero residual cost, zero attack surface.</figcaption>
       </figure>
@@ -1202,7 +1227,7 @@
     <div class="modal-box">
       <button class="modal-close" onclick="closeModalBtn()">✕</button>
       <div class="modal-title">Z-Move Demo — Production migration · Angola Cables</div>
-      <video id="demoVideo" class="modal-video" controls preload="none" playsinline>
+      <video id="demoVideo" class="modal-video" controls preload="none" playsinline poster="assets/zmove_image/done_migration.png">
         <source src="assets/zmove_live_migration.mov" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
