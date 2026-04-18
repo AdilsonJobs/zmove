@@ -7,15 +7,15 @@
   <!-- Security Headers (meta fallback — enforce via HTTP headers on server) -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline';
+    script-src 'self' 'unsafe-inline' https://plausible.io;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data:;
     media-src 'self';
-    connect-src 'none';
+    connect-src https://plausible.io https://formspree.io;
     frame-ancestors 'none';
     base-uri 'self';
-    form-action 'self';
+    form-action 'self' https://formspree.io;
     upgrade-insecure-requests;
   " />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -28,18 +28,50 @@
   <meta name="keywords" content="cloud migration, agentless migration, multi-cloud, Zadara migration, AWS to Zadara, Azure migration, VM migration, cloud mobility" />
   <meta name="author" content="Adilson Camenha" />
   <link rel="canonical" href="https://zmove.io/" />
+  <link rel="alternate" hreflang="en" href="https://zmove.io/" />
+  <link rel="alternate" hreflang="pt" href="https://zmove.io/pt/" />
+  <link rel="alternate" hreflang="x-default" href="https://zmove.io/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://zmove.io/" />
-  <meta property="og:title" content="Z-Move — Move anything. Across any cloud." />
+  <meta property="og:site_name" content="Z-Move" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Z-Move — Agentless Cloud Migration. Across Any Cloud." />
   <meta property="og:description" content="Agentless multi-cloud migration platform. 30 real migrations. SAP HANA, SQL Server, enterprise workloads. No agents. No lock-in." />
   <meta property="og:image" content="https://zmove.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Z-Move — Agentless multi-cloud migration platform" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Z-Move — Move anything. Across any cloud." />
+  <meta name="twitter:site" content="@zmoveio" />
+  <meta name="twitter:title" content="Z-Move — Agentless Cloud Migration. Across Any Cloud." />
   <meta name="twitter:description" content="Agentless multi-cloud migration. 30 real migrations. Zero agents. $0.05/GB." />
+  <meta name="twitter:image" content="https://zmove.io/og-image.png" />
+
+  <!-- Structured Data: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Z-Move",
+    "url": "https://zmove.io",
+    "logo": "https://zmove.io/favicon.svg",
+    "description": "Agentless multi-cloud migration platform for enterprises and MSPs.",
+    "email": "hello@zmove.io",
+    "founder": {
+      "@type": "Person",
+      "name": "Adilson Camenha",
+      "url": "https://www.linkedin.com/in/adilsoncamenha",
+      "jobTitle": "Principal Cloud Solutions Architect"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/adilsoncamenha"
+    ]
+  }
+  </script>
 
   <!-- Structured Data: SoftwareApplication -->
   <script type="application/ld+json">
@@ -47,10 +79,23 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Z-Move",
+    "url": "https://zmove.io",
     "applicationCategory": "BusinessApplication",
-    "description": "Agentless multi-cloud migration platform for moving workloads between Zadara, AWS and Azure.",
-    "offers": { "@type": "Offer", "price": "0.05", "priceCurrency": "USD", "unitText": "per GB" },
-    "author": { "@type": "Person", "name": "Adilson Camenha", "url": "https://www.linkedin.com/in/adilsoncamenha" }
+    "operatingSystem": "Cloud (SaaS)",
+    "description": "Agentless multi-cloud migration platform for moving VMs and enterprise workloads between Zadara, AWS and Azure without installing agents.",
+    "screenshot": "https://zmove.io/assets/zmove_image/dashboard.png",
+    "featureList": "Agentless migration, Ephemeral workers, Multi-cloud support, SAP HANA migration, SQL Server migration, Parallel disk streaming, RBAC, Audit logs",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.05",
+      "priceCurrency": "USD",
+      "description": "Per GB of data migrated. No setup fees, no subscriptions."
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Z-Move",
+      "url": "https://zmove.io"
+    }
   }
   </script>
 
@@ -89,8 +134,15 @@
   }
   </script>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Analytics (cookieless, GDPR-compliant) -->
+  <script defer data-domain="zmove.io" src="https://plausible.io/js/script.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
@@ -412,7 +464,7 @@
 
     /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 48px 24px 32px; }
-    .footer-inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto auto; gap: 48px; align-items: start; }
+    .footer-inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto auto auto; gap: 48px; align-items: start; }
     .footer-brand .logo { font-size: 1.2rem; }
     .footer-brand p { color: var(--muted); font-size: .82rem; margin-top: 10px; max-width: 220px; line-height: 1.6; }
     .footer-col h4 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 16px; }
@@ -453,7 +505,7 @@
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
       .security-grid { grid-template-columns: repeat(2, 1fr); }
       .contact-grid { grid-template-columns: 1fr; }
-      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
       .founder-card { grid-template-columns: 1fr; }
       .founder-photo-col { border-right: none; border-bottom: 1px solid var(--border); padding: 32px 24px; }
       .founder-text-col { padding: 28px 24px; }
@@ -512,7 +564,7 @@
     <div class="hero-inner">
       <div>
         <div class="badge"><div class="badge-dot"></div>Cloud Mobility Platform</div>
-        <h1>Move anything.<br><span class="grad-text">Across any cloud.</span></h1>
+        <h1>Agentless cloud migration.<br><span class="grad-text">Across any cloud.</span></h1>
         <p class="hero-sub">
           Z-Move is an agentless multi-cloud migration platform. Move VMs and enterprise workloads between Zadara, AWS and Azure without installing a single agent.
         </p>
@@ -1122,21 +1174,21 @@
           <div class="form-row">
             <div class="form-group">
               <label>Name</label>
-              <input type="text" placeholder="Your name" />
+              <input type="text" name="name" placeholder="Your name" />
             </div>
             <div class="form-group">
               <label>Company</label>
-              <input type="text" placeholder="Company name" />
+              <input type="text" name="company" placeholder="Company name" />
             </div>
           </div>
           <div class="form-group">
             <label>Work email</label>
-            <input type="email" placeholder="you@company.com" />
+            <input type="email" name="email" placeholder="you@company.com" />
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Source cloud</label>
-              <select>
+              <select name="source_cloud">
                 <option value="">Select...</option>
                 <option>AWS</option>
                 <option>Azure</option>
@@ -1146,7 +1198,7 @@
             </div>
             <div class="form-group">
               <label>Target cloud</label>
-              <select>
+              <select name="target_cloud">
                 <option value="">Select...</option>
                 <option>Zadara</option>
                 <option>AWS</option>
@@ -1157,13 +1209,16 @@
           </div>
           <div class="form-group">
             <label>Tell us about your migration</label>
-            <textarea placeholder="Number of VMs, data size, timeline, any special requirements..."></textarea>
+            <textarea name="message" placeholder="Number of VMs, data size, timeline, any special requirements..."></textarea>
           </div>
           <!-- Honeypot: hidden from humans, filled by bots -->
           <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
             <input type="text" name="website" tabindex="-1" autocomplete="off" />
           </div>
           <div id="formError" style="display:none;color:#f87171;font-size:.82rem;margin-bottom:12px;padding:10px 14px;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:8px;"></div>
+          <div id="formSuccess" style="display:none;color:#4ade80;font-size:.88rem;margin-bottom:12px;padding:14px;background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.2);border-radius:8px;text-align:center;">
+            ✓ Message sent! We'll reply within 24 hours.
+          </div>
           <button class="btn-submit" type="button" onclick="submitForm(this)">
             Send message
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1194,8 +1249,13 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <a href="#" class="logo">Z-Move</a>
+        <a href="/" class="logo">Z-Move</a>
         <p>Agentless multi-cloud migration platform. Move anything, across any cloud.</p>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <a href="https://www.linkedin.com/in/adilsoncamenha" target="_blank" rel="noopener noreferrer" style="color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">LinkedIn</a>
+          <span style="color:var(--border2)">·</span>
+          <a href="/pt/" style="color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">🌐 Português</a>
+        </div>
       </div>
       <div class="footer-col">
         <h4>Product</h4>
@@ -1204,20 +1264,31 @@
           <li><a href="#features">Features</a></li>
           <li><a href="#clouds">Supported clouds</a></li>
           <li><a href="#security">Security</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/case-studies/">Case studies</a></li>
+          <li><a href="/compare/zmove-vs-aws-mgn/">Z-Move vs AWS MGN</a></li>
+          <li><a href="/compare/zmove-vs-zadara-migration-tools/">Z-Move vs Zadara V2Z</a></li>
+          <li><a href="#faq">FAQ</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#metrics">Case studies</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#faq">FAQ</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/terms.html">Terms of Service</a></li>
+          <li><a href="/pt/">Versão PT</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Z-Move · Built by <a href="https://www.linkedin.com/in/adilsoncamenha" target="_blank" rel="noopener noreferrer" style="color:var(--blue);text-decoration:none">Adilson Camenha</a></div>
+      <div class="footer-copy">© 2026 Z-Move · Built by <a href="https://www.linkedin.com/in/adilsoncamenha" target="_blank" rel="noopener noreferrer" style="color:var(--blue);text-decoration:none">Adilson Camenha</a></div>
       <div class="footer-copy">No agents. No lock-in. Just movement.</div>
     </div>
   </footer>
@@ -1311,27 +1382,58 @@
       }
     })();
 
-    // Form validation + honeypot check
-    function submitForm(btn) {
+    // Form validation + Formspree submission
+    // Sign up at formspree.io, create a form, and replace YOUR_FORMSPREE_ID below
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
+
+    async function submitForm(btn) {
       const honeypot = document.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) return;
+
       const errEl = document.getElementById('formError');
+      const successEl = document.getElementById('formSuccess');
       const form = btn.closest('.contact-form');
-      const name = form.querySelector('input[placeholder="Your name"]').value.trim();
-      const email = form.querySelector('input[type="email"]').value.trim();
+      const nameVal = form.querySelector('input[name="name"]').value.trim();
+      const emailVal = form.querySelector('input[name="email"]').value.trim();
       const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       errEl.style.display = 'none';
+      successEl.style.display = 'none';
 
-      if (honeypot && honeypot.value) return; // bot detected — silent drop
+      if (!nameVal) { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
+      if (!emailVal || !emailRe.test(emailVal)) { errEl.textContent = 'Please enter a valid work email.'; errEl.style.display = 'block'; return; }
 
-      if (!name) { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
-      if (!email || !emailRe.test(email)) { errEl.textContent = 'Please enter a valid work email.'; errEl.style.display = 'block'; return; }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
 
-      // Valid — redirect to mailto as fallback until backend is live
-      const p = ['hell','o@zm','ove.','io'];
-      const addr = p.join('');
-      const msg = form.querySelector('textarea').value.trim();
-      window.location.href = 'mailto:' + addr + '?subject=Z-Move Demo Request — ' + encodeURIComponent(name) + '&body=' + encodeURIComponent(msg);
+      const data = {
+        name: nameVal,
+        email: emailVal,
+        company: form.querySelector('input[name="company"]').value.trim(),
+        source_cloud: form.querySelector('select[name="source_cloud"]').value,
+        target_cloud: form.querySelector('select[name="target_cloud"]').value,
+        message: form.querySelector('textarea[name="message"]').value.trim(),
+      };
+
+      try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          successEl.style.display = 'block';
+          form.querySelectorAll('input, select, textarea').forEach(el => { if (el.name !== 'website') el.value = ''; });
+          btn.style.display = 'none';
+        } else {
+          throw new Error('server');
+        }
+      } catch (_) {
+        errEl.textContent = 'Something went wrong. Please email hello@zmove.io directly.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = 'Send message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      }
     }
 
     // Smooth scroll

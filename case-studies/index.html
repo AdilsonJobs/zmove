@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Studies — Z-Move Cloud Migration</title>
+  <meta name="description" content="Real enterprise cloud migration case studies. SAP HANA, SQL Server, cross-cloud migrations. 30 migrations completed. 100% success rate." />
+  <link rel="canonical" href="https://zmove.io/case-studies/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Case Studies — Z-Move Cloud Migration" />
+  <meta property="og:description" content="Real enterprise cloud migration case studies. SAP HANA, SQL Server, cross-cloud. 100% success rate." />
+  <meta property="og:url" content="https://zmove.io/case-studies/" />
+  <script defer data-domain="zmove.io" src="https://plausible.io/js/script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #07080f; --bg2: #0d0f1a; --surface: #161929;
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+      --blue: #3b82f6; --purple: #8b5cf6; --green: #4ade80;
+      --text: #f0f2ff; --muted: #8891b4;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    nav { position: sticky; top: 0; z-index: 100; padding: 0 24px; background: rgba(7,8,15,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1140px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(90deg, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: .875rem; font-weight: 500; transition: color .2s; }
+    .nav-link:hover { color: var(--text); }
+    .btn-nav { padding: 8px 20px; border-radius: 8px; font-size: .875rem; font-weight: 600; background: var(--blue); color: #fff; text-decoration: none; }
+    .hero { padding: 80px 24px 64px; text-align: center; }
+    .section-label { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 520px; margin: 0 auto 48px; line-height: 1.7; }
+    .metrics-bar { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; padding: 24px; background: rgba(59,130,246,0.04); border: 1px solid rgba(59,130,246,0.1); border-radius: 14px; max-width: 600px; margin: 0 auto; }
+    .m-item { text-align: center; }
+    .m-num { font-size: 2rem; font-weight: 900; color: #60a5fa; letter-spacing: -0.03em; }
+    .m-lbl { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; font-weight: 600; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 64px 24px 96px; }
+    .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .case-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; text-decoration: none; display: block; transition: border-color .3s, transform .3s; }
+    .case-card:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-4px); }
+    .case-header { padding: 28px 28px 0; }
+    .case-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: rgba(59,130,246,0.1); color: #93c5fd; margin-bottom: 14px; }
+    .case-client { font-size: .78rem; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+    .case-title { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 24px; color: var(--text); }
+    .case-stats { border-top: 1px solid var(--border); padding: 20px 28px; display: flex; flex-direction: column; gap: 8px; }
+    .case-stat { display: flex; justify-content: space-between; font-size: .83rem; }
+    .case-stat span:first-child { color: var(--muted); }
+    .case-stat span:last-child { font-weight: 600; color: var(--green); }
+    .case-footer { padding: 16px 28px; background: rgba(59,130,246,0.04); border-top: 1px solid var(--border); font-size: .8rem; color: var(--blue); font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--muted); font-size: .8rem; }
+    footer a { color: var(--blue); text-decoration: none; }
+    @media (max-width: 900px) { .cases-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .cases-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">Z-Move</a>
+      <div class="nav-right">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/#contact" class="btn-nav">Request Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <span class="section-label">Case Studies</span>
+    <h1>Real migrations.<br>Real production workloads.</h1>
+    <p>Every case study below is from a live enterprise environment — not a demo or staging setup.</p>
+    <div class="metrics-bar">
+      <div class="m-item"><div class="m-num">30</div><div class="m-lbl">Migrations</div></div>
+      <div class="m-item"><div class="m-num">82</div><div class="m-lbl">Disks transferred</div></div>
+      <div class="m-item"><div class="m-num">100%</div><div class="m-lbl">Success rate</div></div>
+      <div class="m-item"><div class="m-num">0</div><div class="m-lbl">Agents used</div></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cases-grid">
+
+      <a href="/case-studies/united-investment-sap-hana/" class="case-card">
+        <div class="case-header">
+          <span class="case-tag">SAP HANA</span>
+          <div class="case-client">United Investment · Enterprise</div>
+          <div class="case-title">Production SAP HANA migration with 7 disks — zero errors</div>
+        </div>
+        <div class="case-stats">
+          <div class="case-stat"><span>Disks</span><span>7 volumes</span></div>
+          <div class="case-stat"><span>Duration</span><span>253 minutes</span></div>
+          <div class="case-stat"><span>Route</span><span>Luanda 01 → Luanda 02</span></div>
+          <div class="case-stat"><span>Errors</span><span>0</span></div>
+        </div>
+        <div class="case-footer">Read full case study →</div>
+      </a>
+
+      <a href="/case-studies/angola-cables-sql-server/" class="case-card">
+        <div class="case-header">
+          <span class="case-tag">SQL Server</span>
+          <div class="case-client">Angola Cables · Telecom</div>
+          <div class="case-title">Enterprise SQL Server cluster — 2 instances, 97 minutes</div>
+        </div>
+        <div class="case-stats">
+          <div class="case-stat"><span>Instances</span><span>2</span></div>
+          <div class="case-stat"><span>Disks per instance</span><span>3 volumes</span></div>
+          <div class="case-stat"><span>Duration</span><span>97 minutes</span></div>
+          <div class="case-stat"><span>Data integrity</span><span>100%</span></div>
+        </div>
+        <div class="case-footer">Read full case study →</div>
+      </a>
+
+      <a href="/case-studies/angola-cables-aws-zadara/" class="case-card">
+        <div class="case-header">
+          <span class="case-tag">Cross-Cloud</span>
+          <div class="case-client">Angola Cables · Telecom</div>
+          <div class="case-title">AWS US East → Zadara Africa — intercontinental in 3 minutes</div>
+        </div>
+        <div class="case-stats">
+          <div class="case-stat"><span>Source</span><span>AWS US East (Ohio)</span></div>
+          <div class="case-stat"><span>Target</span><span>Zadara Luanda 02</span></div>
+          <div class="case-stat"><span>Duration</span><span>3 minutes 20s</span></div>
+          <div class="case-stat"><span>Type</span><span>Intercontinental</span></div>
+        </div>
+        <div class="case-footer">Read full case study →</div>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Z-Move &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/blog/">Blog</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms</a>
+  </footer>
+</body>
+</html>

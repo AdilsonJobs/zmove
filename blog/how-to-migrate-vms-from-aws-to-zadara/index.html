@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Migrate VMs from AWS to Zadara — Complete Agentless Guide | Z-Move</title>
+  <meta name="description" content="Step-by-step guide to migrating virtual machines from AWS to Zadara using Z-Move's agentless engine. No agents, no downtime, $0.05/GB. Real production example included." />
+  <link rel="canonical" href="https://zmove.io/blog/how-to-migrate-vms-from-aws-to-zadara/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="How to Migrate VMs from AWS to Zadara — Complete Agentless Guide" />
+  <meta property="og:description" content="Step-by-step walkthrough of migrating AWS EC2 instances to Zadara with Z-Move. Agentless, fast, $0.05/GB." />
+  <meta property="og:url" content="https://zmove.io/blog/how-to-migrate-vms-from-aws-to-zadara/" />
+  <meta property="og:image" content="https://zmove.io/og-image.png" />
+  <meta property="article:published_time" content="2026-04-18" />
+  <meta property="article:author" content="Adilson Camenha" />
+  <script defer data-domain="zmove.io" src="https://plausible.io/js/script.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Migrate VMs from AWS to Zadara — Complete Agentless Guide",
+    "description": "Step-by-step guide to migrating virtual machines from AWS to Zadara using Z-Move's agentless engine.",
+    "author": { "@type": "Person", "name": "Adilson Camenha", "url": "https://www.linkedin.com/in/adilsoncamenha" },
+    "publisher": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.io" },
+    "datePublished": "2026-04-18",
+    "url": "https://zmove.io/blog/how-to-migrate-vms-from-aws-to-zadara/"
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #07080f; --bg2: #0d0f1a; --surface: #161929;
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+      --blue: #3b82f6; --cyan: #06b6d4; --green: #4ade80;
+      --text: #f0f2ff; --muted: #8891b4; --mono: 'JetBrains Mono', monospace;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    nav { position: sticky; top: 0; z-index: 100; padding: 0 24px; background: rgba(7,8,15,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1140px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(90deg, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: .875rem; font-weight: 500; transition: color .2s; }
+    .nav-link:hover { color: var(--text); }
+    .btn-nav { padding: 8px 20px; border-radius: 8px; font-size: .875rem; font-weight: 600; background: var(--blue); color: #fff; text-decoration: none; }
+    .article-wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+    .breadcrumb { font-size: .8rem; color: var(--muted); margin-bottom: 32px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .post-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; background: rgba(59,130,246,0.1); color: #93c5fd; margin-bottom: 20px; }
+    h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 20px; }
+    .post-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .85rem; margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .post-meta strong { color: var(--text); }
+    .post-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); }
+    h2 { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; margin: 48px 0 16px; }
+    h3 { font-size: 1.1rem; font-weight: 700; margin: 32px 0 12px; }
+    p { color: var(--muted); font-size: .95rem; margin-bottom: 18px; line-height: 1.78; }
+    ul, ol { color: var(--muted); font-size: .95rem; margin: 0 0 18px 22px; }
+    li { margin-bottom: 8px; line-height: 1.7; }
+    strong { color: var(--text); font-weight: 600; }
+    code { font-family: var(--mono); font-size: .85em; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: #93c5fd; }
+    .code-block { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-block-header { padding: 10px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); font-size: .75rem; color: var(--muted); font-family: var(--mono); display: flex; align-items: center; gap: 8px; }
+    .code-block pre { padding: 20px; font-family: var(--mono); font-size: .82rem; line-height: 1.9; overflow-x: auto; color: #c4cdee; }
+    .t-g { color: #4ade80; } .t-b { color: #60a5fa; } .t-y { color: #fbbf24; } .t-c { color: #22d3ee; } .t-p { color: #c084fc; } .t-m { color: #8891b4; }
+    .callout { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.2); border-radius: 10px; padding: 18px 20px; margin: 24px 0; }
+    .callout p { margin: 0; font-size: .9rem; }
+    .callout.warning { background: rgba(251,191,36,0.07); border-color: rgba(251,191,36,0.25); }
+    .callout.success { background: rgba(74,222,128,0.07); border-color: rgba(74,222,128,0.2); }
+    .step-list { list-style: none; margin: 0 0 24px; display: flex; flex-direction: column; gap: 16px; }
+    .step-item { display: flex; gap: 16px; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); color: #60a5fa; font-size: .78rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .step-body p { margin-bottom: 6px; }
+    .metric-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 24px 0; }
+    .metric-box { background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 20px 24px; flex: 1; min-width: 140px; text-align: center; }
+    .metric-val { font-size: 1.8rem; font-weight: 900; color: #60a5fa; letter-spacing: -0.03em; }
+    .metric-lbl { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
+    .cta-box { background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.05) 100%); border: 1px solid rgba(59,130,246,0.2); border-radius: 16px; padding: 36px; text-align: center; margin-top: 64px; }
+    .cta-box h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 12px; }
+    .cta-box p { margin-bottom: 24px; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 13px 28px; border-radius: 10px; font-size: .95rem; font-weight: 700; background: linear-gradient(135deg, var(--blue), #8b5cf6); color: #fff; text-decoration: none; }
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--muted); font-size: .8rem; }
+    footer a { color: var(--blue); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">Z-Move</a>
+      <div class="nav-right">
+        <a href="/blog/" class="nav-link">Blog</a>
+        <a href="/case-studies/" class="nav-link">Case Studies</a>
+        <a href="/#contact" class="btn-nav">Request Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="article-wrap">
+    <div class="breadcrumb"><a href="/">Z-Move</a> → <a href="/blog/">Blog</a> → How to migrate AWS → Zadara</div>
+
+    <span class="post-tag">Tutorial</span>
+    <h1>How to Migrate VMs from AWS to Zadara — Complete Agentless Guide</h1>
+    <div class="post-meta">
+      <strong>Adilson Camenha</strong>
+      <span class="post-meta-dot"></span>
+      <span>April 18, 2026</span>
+      <span class="post-meta-dot"></span>
+      <span>8 min read</span>
+      <span class="post-meta-dot"></span>
+      <span>AWS · Zadara · Migration</span>
+    </div>
+
+    <p>Moving workloads from AWS to Zadara used to mean weeks of planning, agent installations, and manual disk conversions. With Z-Move's agentless engine, the same migration takes minutes to set up and hours to complete — with zero software deployed inside your VMs.</p>
+
+    <p>This is a real production walkthrough. The migration below is from <strong>AWS US East (Ohio)</strong> to <strong>Zadara Luanda 02</strong>, performed for Angola Cables. It completed in <strong>3 minutes 20 seconds</strong> for a lightweight instance. Enterprise workloads with larger disks take longer, but the process is identical.</p>
+
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-val">0</div><div class="metric-lbl">Agents installed</div></div>
+      <div class="metric-box"><div class="metric-val">$0.05</div><div class="metric-lbl">Per GB</div></div>
+      <div class="metric-box"><div class="metric-val">100%</div><div class="metric-lbl">Data integrity</div></div>
+      <div class="metric-box"><div class="metric-val">Auto</div><div class="metric-lbl">Worker cleanup</div></div>
+    </div>
+
+    <h2>Why migrate from AWS to Zadara?</h2>
+    <p>There are several reasons enterprises choose Zadara over AWS for production workloads:</p>
+    <ul>
+      <li><strong>Cost:</strong> Zadara's storage-as-a-service model often delivers 40–60% cost savings on storage-heavy workloads compared to AWS EBS and S3 pricing.</li>
+      <li><strong>Data sovereignty:</strong> Zadara operates regional clusters in Africa (Angola, Nigeria), Europe, and beyond — keeping data in-country for compliance.</li>
+      <li><strong>Performance:</strong> Zadara's NVMe-based VPSA delivers predictable, dedicated storage performance without the noisy-neighbor issues of shared AWS storage.</li>
+      <li><strong>Vendor independence:</strong> Breaking out of the AWS gravity well protects your organization from pricing changes and regional availability events.</li>
+    </ul>
+
+    <h2>Prerequisites</h2>
+    <p>Before starting, make sure you have:</p>
+    <ul>
+      <li>AWS IAM credentials with <code>ec2:DescribeInstances</code>, <code>ec2:DescribeVolumes</code>, <code>ec2:CreateSnapshot</code>, and related permissions</li>
+      <li>Zadara API credentials (available from the Zadara portal under Settings → API Access)</li>
+      <li>Access to the Z-Move platform at <a href="https://zmove.click" target="_blank" rel="noopener">zmove.click</a></li>
+      <li>Network connectivity between the migration workers and both cloud environments (Z-Move handles this automatically for standard deployments)</li>
+    </ul>
+
+    <div class="callout warning">
+      <p>⚠️ <strong>Recommendation:</strong> Always test with a non-production workload first. While Z-Move has a 100% success rate across 30 production migrations, it's good practice to validate your specific configuration before migrating critical systems.</p>
+    </div>
+
+    <h2>Step-by-step: AWS → Zadara migration</h2>
+
+    <ol class="step-list">
+      <li class="step-item">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <p><strong>Connect your cloud credentials</strong></p>
+          <p>Log in to Z-Move and navigate to <strong>Credentials → Add Provider</strong>. Select AWS and enter your IAM Access Key ID and Secret Access Key. Z-Move encrypts these immediately using Fernet encryption — they are never stored in plaintext.</p>
+          <p>Repeat for Zadara: select Zadara as the provider, enter your API endpoint and access token.</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <p><strong>Discover and select VMs</strong></p>
+          <p>Z-Move queries the AWS API to list your EC2 instances. Select the instance(s) you want to migrate. For each instance, you'll see the attached volumes, their sizes, and the instance type. No agent installation. No reboot required.</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <p><strong>Configure the target</strong></p>
+          <p>Select your Zadara cluster as the target. Choose the target VPSA, storage pool, and network configuration. Z-Move maps AWS instance types to recommended Zadara VM specs, but you can adjust these manually.</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <p><strong>Launch the migration</strong></p>
+          <p>Click <strong>Start Migration</strong>. Z-Move provisions ephemeral worker instances in both AWS and Zadara automatically. These workers handle the disk streaming — your source VM keeps running during the process.</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span style="color:#ff5f57">●</span><span style="color:#febc2e">●</span><span style="color:#28c840">●</span>
+              &nbsp; zmove — job #28 · aws-us-east-1 → zadara-luanda-02
+            </div>
+            <pre><span class="t-m">$</span> <span class="t-b">zmove</span> start --source aws-ohio-01 --target zadara-luanda-02
+<span class="t-m">────────────────────────────────────────────────</span>
+<span class="t-g">✓</span> Source auth · AWS US East (Ohio)
+<span class="t-g">✓</span> Target auth · Zadara Luanda 02
+<span class="t-y">⟳</span> Provisioning ephemeral workers<span class="t-m">...</span>
+<span class="t-g">✓</span> Workers ready · auto-destroy ON
+<span class="t-m">────────────────────────────────────────────────</span>
+<span class="t-c">i</span> VM: <span class="t-p">web-prod-01</span> · 1 disk · 21 GB
+<span class="t-g">streaming</span> ████████████████████ <span class="t-g">100%</span> · 53 MB/s
+<span class="t-g">✓</span> Transfer complete · 3m 20s · 0 errors
+<span class="t-g">✓</span> Workload rebuilt in Zadara
+<span class="t-g">✓</span> Ephemeral workers destroyed
+<span class="t-m">────────────────────────────────────────────────</span>
+<span class="t-g">✓</span> Done. No agents. No residue.</pre>
+          </div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <p><strong>Verify and cut over</strong></p>
+          <p>Once migration completes, Z-Move confirms data integrity via checksum verification. The migrated VM boots in Zadara in the same state it was in AWS. Verify your application works correctly, then point DNS or load balancer to the new instance and shut down the AWS original.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="callout success">
+      <p>✓ <strong>What happens to the workers?</strong> All ephemeral infrastructure — worker EC2 instances, worker Zadara VMs, temporary volumes, elastic IPs, and network interfaces — is automatically destroyed after the migration job completes. Zero residual cost. Zero attack surface.</p>
+    </div>
+
+    <h2>Cost breakdown: AWS to Zadara migration</h2>
+    <p>Using Z-Move's pricing model of <strong>$0.05 per GB</strong>:</p>
+    <ul>
+      <li>A 100 GB workload costs <strong>$5.00</strong> to migrate</li>
+      <li>A 1 TB workload costs <strong>$51.20</strong></li>
+      <li>A 10 TB workload costs <strong>$512.00</strong></li>
+    </ul>
+    <p>Compare this to AWS MGN (free for the first 90 days, then replication costs) or commercial tools like Zerto ($300+/month per VM). For one-time migrations, Z-Move's pay-per-GB model is almost always cheaper.</p>
+    <p>You can estimate your exact cost using the <a href="/#calculator">Z-Move cost calculator</a>.</p>
+
+    <h2>Common questions</h2>
+
+    <h3>Does the source VM need to be shut down?</h3>
+    <p>No. Z-Move takes a snapshot of the running instance and streams from there. The source VM stays up throughout the process. For databases requiring consistent state (e.g., SAP HANA), we recommend a brief quiesce window before snapshot — contact us for guidance on enterprise database migrations.</p>
+
+    <h3>What about Windows VMs?</h3>
+    <p>Fully supported. Z-Move has migrated both Windows Server and Linux workloads. Boot disk handling for Windows includes automatic driver injection for the target hypervisor environment.</p>
+
+    <h3>Is there a limit on disk count?</h3>
+    <p>No fixed limit. Z-Move's parallel engine streams multiple disks simultaneously. We've migrated instances with 7 disks (SAP HANA, United Investment) in a single job.</p>
+
+    <h2>Next steps</h2>
+    <p>Ready to try it on your environment? Request a demo and we'll walk through your specific workloads — including pre-migration assessment and cost estimation.</p>
+
+    <div class="cta-box">
+      <h3>Migrate your first workload</h3>
+      <p>Tell us your source and target cloud, and we'll get back within 24 hours with a migration plan and cost estimate.</p>
+      <a href="/#contact" class="btn-primary">Request Demo →</a>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 Z-Move &nbsp;·&nbsp; <a href="/blog/">Blog</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms</a> &nbsp;·&nbsp; <a href="/">Home</a>
+  </footer>
+</body>
+</html>
