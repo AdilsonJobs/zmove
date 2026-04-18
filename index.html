@@ -214,19 +214,14 @@
       box-shadow: 0 24px 64px rgba(0,0,0,0.5);
       cursor: pointer;
     }
-    .video-thumb {
-      width: 100%; height: 100%; object-fit: cover;
-      background: linear-gradient(135deg, #0d0f1a 0%, #161929 50%, #0d1124 100%);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .video-thumb-inner { text-align: center; }
-    .video-thumb-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 0;
-      padding: 20px;
-    }
-    .vt-card { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 10px 8px; font-family: var(--mono); font-size: .6rem; color: var(--muted); }
-    .vt-card .vt-label { color: #60a5fa; font-weight: 600; margin-bottom: 2px; }
-    .vt-card .vt-val { color: #4ade80; }
+    .video-thumb { width: 100%; height: 100%; overflow: hidden; position: relative; }
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+
+    /* ── PROOF SCREENSHOT ── */
+    .proof-screenshot { margin-top: 52px; }
+    .proof-screenshot img { width: 100%; border-radius: 12px; border: 1px solid var(--border2); box-shadow: 0 16px 48px rgba(0,0,0,0.45); display: block; }
+    .proof-screenshot figcaption { margin-top: 14px; text-align: center; font-size: .78rem; color: var(--muted); line-height: 1.6; }
+    .proof-screenshot figcaption strong { color: var(--text); }
     .play-btn {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       width: 72px; height: 72px; border-radius: 50%;
@@ -420,7 +415,8 @@
     /* ── VIDEO MODAL ── */
     .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 24px; }
     .modal-overlay.open { display: flex; }
-    .modal-box { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 24px; max-width: 760px; width: 100%; position: relative; }
+    .modal-box { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 24px; max-width: 960px; width: 100%; position: relative; }
+    .modal-video { width: 100%; border-radius: 10px; display: block; aspect-ratio: 16/9; background: #000; }
     .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: none; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: background .2s; }
     .modal-close:hover { background: rgba(255,255,255,0.15); }
     .modal-title { font-size: 1rem; font-weight: 700; margin-bottom: 16px; padding-right: 40px; }
@@ -627,14 +623,7 @@
         <div class="fade-up">
           <div class="video-player" onclick="openModal()" role="button" aria-label="Play demo video">
             <div class="video-thumb">
-              <div class="video-thumb-grid">
-                <div class="vt-card"><div class="vt-label">JOB</div><div class="vt-val">#0029</div></div>
-                <div class="vt-card"><div class="vt-label">SOURCE</div><div class="vt-val">Luanda 01</div></div>
-                <div class="vt-card"><div class="vt-label">TARGET</div><div class="vt-val">Sangano 01</div></div>
-                <div class="vt-card"><div class="vt-label">DISKS</div><div class="vt-val">2 / 2</div></div>
-                <div class="vt-card"><div class="vt-label">STATUS</div><div class="vt-val">✓ done</div></div>
-                <div class="vt-card"><div class="vt-label">TIME</div><div class="vt-val">52m 40s</div></div>
-              </div>
+              <img src="assets/zmove_image/done_migration.png" alt="Z-Move — Migration completed: FW-PFSense to Sangano 01, 21 GB, 53 MB/s, 5 steps" />
             </div>
             <div class="play-btn">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M10 7L22 14L10 21V7Z" fill="white"/></svg>
@@ -819,6 +808,10 @@
           <div class="case-row"><span>Type</span><span>Intercontinental</span></div>
         </div>
       </div>
+      <figure class="proof-screenshot fade-up">
+        <img src="assets/zmove_image/zadara_zmove_events.png" alt="Zadara event log — 42 infrastructure events auto-destroyed after production migration" />
+        <figcaption><strong>42 infrastructure events.</strong> Every ephemeral worker, volume, network interface, and elastic IP automatically destroyed after migration — zero residual cost, zero attack surface.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -1209,13 +1202,10 @@
     <div class="modal-box">
       <button class="modal-close" onclick="closeModalBtn()">✕</button>
       <div class="modal-title">Z-Move Demo — Production migration · Angola Cables</div>
-      <div class="modal-video-placeholder">
-        <div style="font-size:3rem">🎬</div>
-        <p>Demo video coming soon.<br>Request a live walkthrough and we'll show you a real migration in action.</p>
-        <a href="#contact" class="btn-primary" onclick="closeModalBtn()" style="font-size:.85rem;padding:10px 20px">
-          Request live demo
-        </a>
-      </div>
+      <video id="demoVideo" class="modal-video" controls preload="none" playsinline>
+        <source src="assets/zmove_live_migration.mov" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </div>
   </div>
 
@@ -1278,7 +1268,11 @@
 
     // Video modal
     function openModal() { document.getElementById('videoModal').classList.add('open'); }
-    function closeModalBtn() { document.getElementById('videoModal').classList.remove('open'); }
+    function closeModalBtn() {
+      document.getElementById('videoModal').classList.remove('open');
+      const v = document.getElementById('demoVideo');
+      v.pause();
+    }
     function closeModal(e) { if (e.target === document.getElementById('videoModal')) closeModalBtn(); }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
 
