@@ -81,14 +81,7 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Legal -->
-  <url>
-    <loc>https://zmove.io/privacy.html</loc>
-    <lastmod>2026-04-18</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
+  <!-- Legal (privacy.html excluded — has noindex meta) -->
   <url>
     <loc>https://zmove.io/terms.html</loc>
     <lastmod>2026-04-18</lastmod>

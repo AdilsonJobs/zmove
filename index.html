@@ -105,31 +105,32 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Does Z-Move require agents installed on my VMs?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. Z-Move is agentless by design. No software is installed on your source or target VMs at any point during the migration process." }
-      },
-      {
-        "@type": "Question",
-        "name": "Which cloud providers does Z-Move support?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Z-Move currently supports Zadara, AWS (Amazon Web Services), and Azure. More providers including GCP and OVH are on the roadmap." }
-      },
-      {
-        "@type": "Question",
-        "name": "How much does Z-Move cost?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Z-Move charges $0.05 per GB of data migrated. There are no setup fees, no subscriptions, and no minimum commitment. Enterprise volume pricing is available." }
-      },
-      {
-        "@type": "Question",
-        "name": "Can Z-Move migrate SAP HANA or large enterprise databases?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Z-Move has successfully migrated SAP HANA workloads with 7 disks in production environments. SQL Server migrations have also been completed in under 100 minutes." }
-      },
-      {
-        "@type": "Question",
-        "name": "What happens to the migration infrastructure after the job completes?",
-        "acceptedAnswer": { "@type": "Answer", "text": "All ephemeral workers provisioned for the migration are automatically destroyed upon completion. There are no persistent resources, no residual costs, and no attack surface left behind." }
-      }
+      { "@type": "Question", "name": "Does Z-Move require agents installed on my VMs?", "acceptedAnswer": { "@type": "Answer", "text": "No. Z-Move is agentless by design. Zero software is installed inside your source or target VMs at any point. Your workloads are never touched — only the cloud API layer is used." } },
+      { "@type": "Question", "name": "Can Z-Move migrate SAP HANA or large enterprise databases?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Z-Move has successfully migrated SAP HANA in production with 7 disks in 253 minutes, and SQL Server clusters with 3 disks per instance in under 100 minutes. Enterprise workloads are a core use case." } },
+      { "@type": "Question", "name": "What happens to migration infrastructure after the job completes?", "acceptedAnswer": { "@type": "Answer", "text": "All ephemeral workers are automatically destroyed after every migration job. There are no persistent resources, no residual costs, and no attack surface left behind. Every job starts and ends clean." } },
+      { "@type": "Question", "name": "Does Z-Move support intercontinental migrations?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Intercontinental migrations have been tested and validated, including Angola to Brazil and AWS US East to Zadara Africa. Z-Move handles the network complexity transparently." } },
+      { "@type": "Question", "name": "How is pricing calculated?", "acceptedAnswer": { "@type": "Answer", "text": "Z-Move charges $0.05 per GB of data transferred. There are no setup fees, no subscriptions, and no idle charges. You pay only for what you actually migrate. Enterprise volume discounts are available from 10 TB." } },
+      { "@type": "Question", "name": "Is there a private or on-premise deployment option?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Enterprise customers can run Z-Move as a private deployment in their own infrastructure, including white-label options for MSPs and cloud providers. Contact us for details." } },
+      { "@type": "Question", "name": "Which cloud providers does Z-Move currently support?", "acceptedAnswer": { "@type": "Answer", "text": "Z-Move supports Zadara (ZCompute/Symphony), AWS, and Microsoft Azure as both source and target in any direction — Zadara ↔ Zadara (cross-region), Zadara ↔ AWS, and Zadara ↔ Azure. GCP, OVH, and further private cloud providers are on the roadmap." } },
+      { "@type": "Question", "name": "What credentials does Z-Move need from my cloud accounts?", "acceptedAnswer": { "@type": "Answer", "text": "For Zadara: Access Key + Secret Key. For AWS: Access Key ID + Secret Access Key. For Azure: Subscription ID, Tenant ID, Client ID, and Client Secret. All credentials are Fernet-encrypted at rest and never logged." } },
+      { "@type": "Question", "name": "Which operating systems are supported on the migrated VMs?", "acceptedAnswer": { "@type": "Answer", "text": "Z-Move works at the disk/volume level via cloud APIs, making it OS-agnostic. Windows Server, any Linux distribution, and mixed-OS environments are fully supported without modification or in-guest agents." } },
+      { "@type": "Question", "name": "Does Z-Move preserve disk encryption?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Z-Move transfers disk volumes at the block level using native cloud snapshot and volume APIs. Cloud-native encryption (AWS EBS, Azure Disk Encryption) is preserved transparently. BitLocker-encrypted disks are transferred as-is and remain encrypted at the destination." } },
+      { "@type": "Question", "name": "How does a migration work step by step?", "acceptedAnswer": { "@type": "Answer", "text": "Five steps: (1) Connect — authenticate with API credentials for source and target; (2) Select — choose VMs, snapshots, or disk images; (3) Launch — Z-Move provisions ephemeral worker VMs in both regions; (4) Stream — the export worker streams disk data to the import worker, which reconstructs volumes in the target; (5) Cleanup — all ephemeral workers are terminated and the job log is persisted. No SSH, no agents, no manual intervention." } },
+      { "@type": "Question", "name": "How long does a typical migration take?", "acceptedAnswer": { "@type": "Answer", "text": "Duration depends on disk size and network bandwidth. Reference: SQL Server with 3 disks — 97 minutes; SAP HANA with 7 disks — 253 minutes. A standard 50 GB web server typically completes in under 60 minutes. The import VM is pre-warmed in parallel with the export phase to minimize total job time." } },
+      { "@type": "Question", "name": "Can I migrate only specific disks from a VM?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. At the resource selection step you can choose individual volumes from a VM instead of migrating all attached disks. This is useful for separating data volumes from OS disks or for partial migrations." } },
+      { "@type": "Question", "name": "Can I cancel a migration in progress?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Active jobs can be cancelled from the dashboard. Ephemeral workers are terminated immediately upon cancellation to prevent any residual compute charges, and the job status is recorded in the audit log." } },
+      { "@type": "Question", "name": "What happens if a migration job fails?", "acceptedAnswer": { "@type": "Answer", "text": "Z-Move detects the failure, terminates all ephemeral workers, and records the error with full context in the job log. You can review the failure detail in the dashboard and re-launch the job. The source VM and disks are never modified, so there is no data loss on failure." } },
+      { "@type": "Question", "name": "Does my data pass through Z-Move's infrastructure?", "acceptedAnswer": { "@type": "Answer", "text": "No. Data is transferred directly between cloud provider APIs using ephemeral worker VMs provisioned inside your cloud accounts. Z-Move orchestrates the process; your data never transits Z-Move's servers." } },
+      { "@type": "Question", "name": "How are my cloud credentials protected?", "acceptedAnswer": { "@type": "Answer", "text": "Credentials are encrypted at rest using Fernet symmetric encryption. They are never logged, never transmitted outside the orchestration layer, and are used exclusively during the active job. Enterprise deployments support short-lived IAM roles and temporary tokens." } },
+      { "@type": "Question", "name": "Is there a full audit log for each migration?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every job generates a complete audit trail: who triggered it, timestamps per step, all resources provisioned and destroyed, bytes transferred, compute time, cost recorded, and any errors — all persisted and visible in the dashboard." } },
+      { "@type": "Question", "name": "What is the expected downtime window during cutover?", "acceptedAnswer": { "@type": "Answer", "text": "Downtime is limited to the final cutover moment — stopping the source VM and starting the migrated instance at the target. For most workloads this is under 5 minutes. The bulk of the migration (disk streaming) runs while the source VM can remain online." } },
+      { "@type": "Question", "name": "Does Z-Move automatically shut down the source VM?", "acceptedAnswer": { "@type": "Answer", "text": "No. Z-Move only reads snapshot and volume data through the cloud API — it never modifies or shuts down the source VM. Decommissioning the source is always a manual action under your control." } },
+      { "@type": "Question", "name": "What happens to the source environment if I need to roll back?", "acceptedAnswer": { "@type": "Answer", "text": "Because Z-Move never modifies the source, rollback is trivial: your source VM and disks remain exactly as they were. If the target validation fails, simply continue running from the source — no restore process required." } },
+      { "@type": "Question", "name": "Can I migrate hundreds of VMs in parallel?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Z-Move's FastAPI backend with Redis-backed job orchestration handles concurrent migrations with no shared bottleneck. Ephemeral workers are provisioned independently per job. Enterprise accounts can run large parallel batches." } },
+      { "@type": "Question", "name": "Does Z-Move handle multi-disk and multi-NIC VM configurations?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Multi-disk VMs are handled natively — disks are streamed in parallel to maximize throughput. Network interface configurations are preserved as part of the machine image rebuild in the target cloud." } },
+      { "@type": "Question", "name": "Is Z-Move suitable for migrating entire data centers?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Full data center migrations involving 100+ TB of workloads have been completed using Z-Move, with parallel job scheduling, real-time monitoring across all jobs, and zero-agent architecture on every workload." } },
+      { "@type": "Question", "name": "Is there a free trial or proof-of-concept engagement?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We offer a supported POC for enterprise customers to validate Z-Move against your specific environment before committing. Most POCs run 2–4 weeks and include a live test migration of a real workload." } },
+      { "@type": "Question", "name": "Can I integrate Z-Move into CI/CD pipelines or automation workflows?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Z-Move exposes both a CLI and a REST API, making it fully scriptable and automatable. MSPs use it to trigger migrations programmatically; DevOps teams integrate it into deployment pipelines for cloud mobility workflows." } }
     ]
   }
   </script>
@@ -180,6 +181,13 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
+    /* Skip navigation */
+    .skip-nav { position: absolute; left: -9999px; top: 8px; z-index: 9999; padding: 8px 20px; background: var(--blue); color: #fff; border-radius: 8px; font-weight: 700; font-size: .9rem; text-decoration: none; }
+    .skip-nav:focus { left: 8px; }
+
+    /* Focus styles for keyboard navigation */
+    *:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -195,7 +203,7 @@
     .nav-links a:hover { color: var(--text); }
     .btn-nav { padding: 8px 20px; border-radius: 8px; font-size: .875rem; font-weight: 600; background: var(--blue); color: #fff !important; border: none; cursor: pointer; text-decoration: none; transition: background .2s, box-shadow .2s; }
     .btn-nav:hover { background: #2563eb !important; box-shadow: 0 0 20px rgba(59,130,246,0.4); }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
     .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
 
     /* ── HERO ── */
@@ -233,7 +241,8 @@
     .t-y { color: #fbbf24; } .t-p { color: #c084fc; } .t-c { color: #22d3ee; }
     .t-bar { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
     .progress-track { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan)); animation: fill 3s ease forwards; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan)); width: 0; }
+    .progress-fill.animated { animation: fill 3s ease forwards; }
     @keyframes fill { from{width:0} to{width:100%} }
     .blink-cursor::after { content: '▌'; animation: blink 1s infinite; }
 
@@ -408,12 +417,13 @@
     .faq-section { background: var(--bg2); }
     .faq-list { max-width: 720px; display: flex; flex-direction: column; gap: 12px; }
     .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-    .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; font-size: .95rem; font-weight: 600; gap: 16px; user-select: none; }
+    .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; font-size: .95rem; font-weight: 600; gap: 16px; user-select: none; background: none; border: none; width: 100%; color: inherit; text-align: left; font-family: inherit; line-height: inherit; }
     .faq-q:hover { background: rgba(255,255,255,0.02); }
     .faq-arrow { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: rgba(59,130,246,0.12); display: flex; align-items: center; justify-content: center; transition: transform .3s; }
     .faq-item.open .faq-arrow { transform: rotate(180deg); }
     .faq-a { display: none; padding: 0 24px 20px; font-size: .875rem; color: var(--muted); line-height: 1.75; }
     .faq-item.open .faq-a { display: block; }
+    .faq-group-label { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); padding: 20px 4px 4px; opacity: .45; }
 
     /* ── FOUNDER ── */
     .founder-section { background: var(--bg); }
@@ -539,6 +549,8 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
   <!-- NAV -->
   <nav>
     <div class="nav-inner">
@@ -551,14 +563,15 @@
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#contact" class="btn-nav">Get Started</a></li>
       </ul>
-      <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation" aria-expanded="false">
         <span></span><span></span><span></span>
-      </div>
+      </button>
     </div>
   </nav>
 
   <!-- HERO -->
-  <section class="hero" id="hero">
+  <section class="hero" id="hero" tabindex="-1">
+  <span id="main-content"></span>
     <div class="hero-grid"></div>
     <div class="hero-glow"></div>
     <div class="hero-inner">
@@ -672,8 +685,8 @@
         <div class="chrome-dots"><span class="chrome-dot r"></span><span class="chrome-dot y"></span><span class="chrome-dot g"></span></div>
         <span class="chrome-title">zmove.click — Dashboard · Migration Service Operational Overview</span>
       </div>
-      <img src="assets/zmove_image/dashboard.png" alt="Z-Move dashboard — 30 migrations, 100% success rate, real-time activity" />
-      <figcaption><strong>The dashboard your team sees.</strong> Real-time status, 7-day activity, and full migration history — all in one view.</figcaption>
+      <img src="assets/zmove_image/dashboard.png" alt="Z-Move dashboard — 30 migrations, 100% success rate, real-time activity" loading="lazy" />
+      <figcaption><strong>The dashboard your team sees.</strong> Real-time status, 7-day activity, and full migration history - all in one view.</figcaption>
     </figure>
   </div>
 
@@ -694,7 +707,7 @@
           </ul>
         </div>
         <div class="fade-up">
-          <div class="video-player" onclick="openModal()" role="button" aria-label="Play demo video">
+          <div class="video-player" onclick="openModal()" role="button" aria-label="Play demo video" tabindex="0">
             <div class="video-thumb">
               <img src="assets/zmove_image/done_migration.png" alt="Z-Move — Migration completed: FW-PFSense to Sangano 01, 21 GB, 53 MB/s, 5 steps" />
             </div>
@@ -702,7 +715,7 @@
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M10 7L22 14L10 21V7Z" fill="white"/></svg>
             </div>
           </div>
-          <p class="video-caption"><strong>90-second accelerated demo</strong> · Real production migration</p>
+          <p class="video-caption"><strong>60-second accelerated demo</strong> · Real production migration</p>
         </div>
       </div>
     </div>
@@ -886,7 +899,7 @@
           <div class="chrome-dots"><span class="chrome-dot r"></span><span class="chrome-dot y"></span><span class="chrome-dot g"></span></div>
           <span class="chrome-title">Zadara Cloud — Events · 17-Apr-26 · +42 Items</span>
         </div>
-        <img src="assets/zmove_image/zadara_zmove_events.png" alt="Zadara event log — 42 infrastructure events auto-destroyed after production migration" />
+        <img src="assets/zmove_image/zadara_zmove_events.png" alt="Zadara event log — 42 infrastructure events auto-destroyed after production migration" loading="lazy" />
         <figcaption><strong>+42 infrastructure events.</strong> Every ephemeral worker, volume, network interface, and elastic IP automatically destroyed after migration, zero residual cost, zero attack surface.</figcaption>
       </figure>
     </div>
@@ -985,9 +998,8 @@
         <p>Adjust the values below to get an instant estimate. No signup required.</p>
         <div class="calc-row">
           <div class="calc-field">
-            <label>Data to migrate (TB)</label>
+            <label for="calcTB">Avg. data per VM (TB)</label>
             <input type="number" id="calcTB" value="1" min="0.1" step="0.1" oninput="calcCost()" />
-          </div>
           <div class="calc-field">
             <label>Number of VMs</label>
             <input type="number" id="calcVMs" value="5" min="1" oninput="calcCost()" />
@@ -1053,48 +1065,231 @@
         <h2>Common questions.</h2>
       </div>
       <div class="faq-list fade-up">
+
+        <div class="faq-group-label">Architecture</div>
         <div class="faq-item open">
-          <div class="faq-q" onclick="toggleFaq(this)">
+          <button class="faq-q" onclick="toggleFaq(this)">
             Does Z-Move require agents installed on my VMs?
             <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          </button>
           <div class="faq-a">No. Z-Move is agentless by design. Zero software is installed inside your source or target VMs at any point. Your workloads are never touched — only the cloud API layer is used.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">
+          <button class="faq-q" onclick="toggleFaq(this)">
             Can Z-Move migrate SAP HANA or large enterprise databases?
             <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          </button>
           <div class="faq-a">Yes. Z-Move has successfully migrated SAP HANA in production with 7 disks in 253 minutes, and SQL Server clusters with 3 disks per instance in under 100 minutes. Enterprise workloads are a core use case.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">
+          <button class="faq-q" onclick="toggleFaq(this)">
             What happens to migration infrastructure after the job completes?
             <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          </button>
           <div class="faq-a">All ephemeral workers are automatically destroyed after every migration job. There are no persistent resources, no residual costs, and no attack surface left behind. Every job starts and ends clean.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">
+          <button class="faq-q" onclick="toggleFaq(this)">
             Does Z-Move support intercontinental migrations?
             <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          </button>
           <div class="faq-a">Yes. Intercontinental migrations have been tested and validated, including Angola to Brazil and AWS US East to Zadara Africa. Z-Move handles the network complexity transparently.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">
+          <button class="faq-q" onclick="toggleFaq(this)">
             How is pricing calculated?
             <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          </button>
           <div class="faq-a">Z-Move charges $0.05 per GB of data transferred. There are no setup fees, no subscriptions, and no idle charges. You pay only for what you actually migrate. Enterprise volume discounts are available from 10 TB.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="toggleFaq(this)">
+          <button class="faq-q" onclick="toggleFaq(this)">
             Is there a private or on-premise deployment option?
             <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          </button>
           <div class="faq-a">Yes. Enterprise customers can run Z-Move as a private deployment in their own infrastructure, including white-label options for MSPs and cloud providers. Contact us for details.</div>
         </div>
+
+        <div class="faq-group-label">Compatibility &amp; Platforms</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Which cloud providers does Z-Move currently support?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Z-Move supports Zadara (ZCompute/Symphony), AWS, and Microsoft Azure as both source and target in any direction — Zadara ↔ Zadara (cross-region), Zadara ↔ AWS, and Zadara ↔ Azure. GCP, OVH, and further private cloud providers are on the roadmap.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What credentials does Z-Move need from my cloud accounts?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Requirements vary by provider. For Zadara: Access Key + Secret Key. For AWS: Access Key ID + Secret Access Key. For Azure: Subscription ID, Tenant ID, Client ID, and Client Secret. All credentials are Fernet-encrypted at rest and never logged or shared.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Which operating systems are supported on the migrated VMs?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Z-Move operates at the disk/volume level via cloud APIs, making it OS-agnostic. Windows Server, any Linux distribution, and mixed-OS environments are all fully supported — no in-guest agents or OS-level access required.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I migrate Windows Server and Linux VMs in the same batch?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Because Z-Move works at the block/disk level through the cloud API, different OS types can be orchestrated in parallel within the same account without any special configuration or per-OS treatment.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Does Z-Move preserve disk encryption (BitLocker, cloud-native)?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Disks are transferred at the block level using native cloud snapshot and volume APIs. Cloud-native encryption (AWS EBS, Azure Disk Encryption) is preserved transparently. BitLocker-encrypted disks are transferred as-is and remain encrypted at the destination — the key never leaves your environment.</div>
+        </div>
+
+        <div class="faq-group-label">Process &amp; Control</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How does a migration work step by step?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Five steps: (1) Connect — authenticate with API credentials for source and target clouds; (2) Select — choose the VM, snapshot, or disk image to migrate; (3) Launch — Z-Move provisions ephemeral worker VMs in both regions simultaneously; (4) Stream — the export worker streams disk data (sparse-aware) to the import worker, which reconstructs volumes and creates a machine image in the target; (5) Cleanup — all workers are terminated and the full job log is persisted. No SSH, no agents, no manual intervention at any step.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How long does a typical migration take?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Duration depends on disk size and available network bandwidth between clouds. Reference times: SQL Server cluster with 3 disks — 97 minutes; SAP HANA with 7 disks in production — 253 minutes; a standard 50 GB web server — under 60 minutes. The import VM is pre-warmed in parallel with the export phase to minimize total job time.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I migrate only specific disks from a VM, not the entire instance?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. At the resource selection step you can choose individual volumes instead of migrating all attached disks. This is useful for separating data volumes from OS disks, or when only specific storage needs to move to the target cloud.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I cancel a migration that is in progress?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Active jobs can be cancelled directly from the dashboard. Ephemeral workers are terminated immediately upon cancellation to prevent any residual compute charges, and the cancellation is recorded in the full audit log.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What happens if a migration job fails mid-way?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Z-Move detects the failure, terminates all ephemeral workers regardless of outcome, and persists the full error context in the job log. You can review the failure reason in the dashboard and re-launch the job from scratch. The source VM and disks are never modified — there is no data loss on failure.</div>
+        </div>
+
+        <div class="faq-group-label">Security &amp; Compliance</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Does my data pass through Z-Move's servers?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">No. Data is transferred directly between cloud provider APIs using ephemeral worker VMs provisioned inside your own cloud accounts. Z-Move orchestrates the process; your data never transits Z-Move's infrastructure.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How are my cloud credentials protected?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Credentials are encrypted at rest using Fernet symmetric encryption. They are never logged, never transmitted outside the orchestration layer, and are used exclusively for the duration of the active job. Enterprise deployments can use short-lived IAM roles and temporary tokens for zero-persistent-credential workflows.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is there a full audit log for each migration?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Every job generates a complete audit trail: who triggered it, timestamps per step, all resources provisioned and destroyed, bytes transferred, compute time, cost, and any errors — all persisted and accessible from the dashboard. Admins can also export billing events as CSV.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is Z-Move compatible with enterprise security policies?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Z-Move uses Fernet-encrypted credential storage, JWT-based authentication (ES256 via JWKS), RBAC with three role levels (user / admin / super_admin), and multi-tenant isolation via operator scoping. Data paths go directly between cloud providers. Enterprise security reviews and compliance documentation are available on request.</div>
+        </div>
+
+        <div class="faq-group-label">Cutover &amp; Continuity</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What is the expected downtime window during cutover?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Downtime is limited to the final cutover moment — stopping the source VM and starting the migrated instance in the target cloud. For most workloads this is under 5 minutes. The bulk of the migration (disk streaming) runs independently and does not require the source VM to be offline.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Does Z-Move automatically shut down the source VM?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">No. Z-Move only reads snapshot and volume data through the cloud API — it never modifies, restarts, or shuts down the source VM. Decommissioning the source is always a deliberate, manual action under your control.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How do I validate the migrated VM before cutting over?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">After the job completes, the target machine image is ready to launch. You can start the VM in the target cloud, run connectivity and application health checks, and only then decommission the source. Z-Move imposes no timeout on this validation window — it is entirely under your control.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What happens to the source environment if I need to roll back?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Because Z-Move never modifies the source, rollback requires no action — your source VM and all its disks remain exactly as they were. If target validation fails, simply continue running from the source. No restore process, no data recovery required.</div>
+        </div>
+
+        <div class="faq-group-label">Scale &amp; Use Cases</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I migrate hundreds of VMs in parallel?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Z-Move's FastAPI backend with Redis-backed job orchestration is built for concurrent migrations with no shared bottleneck. Ephemeral workers are provisioned independently per job, so parallel jobs do not contend for resources. Contact us for capacity planning on large-scale programs.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Does Z-Move handle multi-disk and multi-NIC VM configurations?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Multi-disk VMs are handled natively — disks are streamed in parallel to maximize throughput. Network interface configurations are preserved as part of the machine image rebuild in the target cloud using the target platform's equivalent networking model.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is Z-Move suitable for migrating entire data centers?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Full data center migrations involving 100+ TB have been completed using Z-Move, with parallel job scheduling, real-time status monitoring across all active jobs, and zero-agent architecture on every workload. This is the scale the platform was designed for.</div>
+        </div>
+
+        <div class="faq-group-label">Commercial &amp; Support</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What SLA and support levels are available for enterprise customers?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Enterprise customers receive dedicated support with defined response-time SLAs, a named technical contact, and access to private deployment and white-label options. Specific SLA tiers are defined per agreement — contact us to discuss your requirements.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is there a free trial or proof-of-concept engagement?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. We offer a supported POC for enterprise customers to validate Z-Move against your specific environment before committing. Most POCs run 2–4 weeks and include a live test migration of a real production workload with a dedicated technical contact.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I integrate Z-Move into CI/CD pipelines or automation workflows?
+            <div class="faq-arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </button>
+          <div class="faq-a">Yes. Z-Move exposes both a CLI and a REST API, making it fully scriptable and automatable. MSPs use it to trigger migrations programmatically; DevOps teams integrate it into deployment pipelines for cloud mobility workflows. Contact us for API documentation and integration support.</div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1108,7 +1303,7 @@
       </div>
       <div class="founder-card fade-up">
         <div class="founder-photo-col">
-          <img src="assets/founder.png" alt="Adilson Camenha" class="founder-avatar" />
+          <img src="assets/founder.png" alt="Adilson Camenha" class="founder-avatar" loading="lazy" />
           <div class="founder-photo-name">Adilson Camenha</div>
           <div class="founder-photo-location">📍 Luanda, Angola</div>
         </div>
@@ -1173,22 +1368,22 @@
         <div class="contact-form fade-up">
           <div class="form-row">
             <div class="form-group">
-              <label>Name</label>
-              <input type="text" name="name" placeholder="Your name" />
+              <label for="fieldName">Name</label>
+              <input type="text" id="fieldName" name="name" placeholder="Your name" />
             </div>
             <div class="form-group">
-              <label>Company</label>
-              <input type="text" name="company" placeholder="Company name" />
+              <label for="fieldCompany">Company</label>
+              <input type="text" id="fieldCompany" name="company" placeholder="Company name" />
             </div>
           </div>
           <div class="form-group">
-            <label>Work email</label>
-            <input type="email" name="email" placeholder="you@company.com" />
+            <label for="fieldEmail">Work email</label>
+            <input type="email" id="fieldEmail" name="email" placeholder="you@company.com" />
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Source cloud</label>
-              <select name="source_cloud">
+              <label for="fieldSource">Source cloud</label>
+              <select id="fieldSource" name="source_cloud">
                 <option value="">Select...</option>
                 <option>AWS</option>
                 <option>Azure</option>
@@ -1197,8 +1392,8 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Target cloud</label>
-              <select name="target_cloud">
+              <label for="fieldTarget">Target cloud</label>
+              <select id="fieldTarget" name="target_cloud">
                 <option value="">Select...</option>
                 <option>Zadara</option>
                 <option>AWS</option>
@@ -1208,8 +1403,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Tell us about your migration</label>
-            <textarea name="message" placeholder="Number of VMs, data size, timeline, any special requirements..."></textarea>
+            <label for="fieldMessage">Tell us about your migration</label>
+            <textarea id="fieldMessage" name="message" placeholder="Number of VMs, data size, timeline, any special requirements..."></textarea>
           </div>
           <!-- Honeypot: hidden from humans, filled by bots -->
           <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
@@ -1299,7 +1494,8 @@
       <button class="modal-close" onclick="closeModalBtn()">✕</button>
       <div class="modal-title">Z-Move Demo — Production migration · Angola Cables</div>
       <video id="demoVideo" class="modal-video" controls preload="none" playsinline poster="assets/zmove_image/done_migration.png">
-        <source src="assets/zmove_live_migration.mov" type="video/mp4" />
+        <!-- TODO: convert to .mp4 for cross-browser support (ffmpeg -i zmove_live_migration.mov -c:v h264 zmove_live_migration.mp4) -->
+        <source src="assets/zmove_live_migration.mov" type="video/quicktime" />
         Your browser does not support the video tag.
       </video>
     </div>
@@ -1308,10 +1504,16 @@
   <script>
     // Nav toggle
     function toggleMenu() {
-      document.getElementById('navLinks').classList.toggle('open');
+      const nav = document.getElementById('navLinks');
+      const burger = document.querySelector('.hamburger');
+      const isOpen = nav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(isOpen));
     }
     document.querySelectorAll('#navLinks a').forEach(a => {
-      a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+      a.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+        document.querySelector('.hamburger').setAttribute('aria-expanded', 'false');
+      });
     });
 
     // Scroll fade-up
@@ -1319,6 +1521,20 @@
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.08 });
     document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    // Terminal progress bar — animate when scrolled into view
+    const terminalEl = document.querySelector('.terminal');
+    if (terminalEl) {
+      const progressObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.querySelector('.progress-fill').classList.add('animated');
+            progressObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      progressObs.observe(terminalEl);
+    }
 
     // Counter animation
     function animCount(el, target, suffix) {
@@ -1348,7 +1564,7 @@
       const vms = parseInt(document.getElementById('calcVMs').value) || 1;
       const mult = parseInt(document.getElementById('calcType').value) || 1;
       const gb = tb * 1024;
-      const cost = gb * 0.05 * mult;
+      const cost = gb * vms * 0.05 * mult;
       document.getElementById('calcResult').textContent =
         cost >= 1000 ? '$' + (cost / 1000).toFixed(1) + 'k' : '$' + cost.toFixed(2);
     }
@@ -1361,6 +1577,23 @@
       document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
       if (!wasOpen) item.classList.add('open');
     }
+
+    // Mobile menu: close on outside click
+    document.addEventListener('click', e => {
+      const nav = document.getElementById('navLinks');
+      const burger = document.querySelector('.hamburger');
+      if (nav.classList.contains('open') && !nav.contains(e.target) && !burger.contains(e.target)) {
+        nav.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Keyboard activation for role="button" elements
+    document.querySelectorAll('[role="button"][tabindex="0"]').forEach(el => {
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+      });
+    });
 
     // Video modal
     function openModal() { document.getElementById('videoModal').classList.add('open'); }
@@ -1385,6 +1618,9 @@
     // Form validation + Formspree submission
     // Sign up at formspree.io, create a form, and replace YOUR_FORMSPREE_ID below
     const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
+    if (FORMSPREE_ENDPOINT.includes('YOUR_FORMSPREE_ID')) {
+      console.warn('[Z-Move] Formspree not configured. Replace YOUR_FORMSPREE_ID in FORMSPREE_ENDPOINT. Form submissions will fail.');
+    }
 
     async function submitForm(btn) {
       const honeypot = document.querySelector('input[name="website"]');
