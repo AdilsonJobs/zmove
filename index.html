@@ -1617,7 +1617,7 @@
 
     // Form validation + Formspree submission
     // Sign up at formspree.io, create a form, and replace YOUR_FORMSPREE_ID below
-    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mwvykwlq';
     if (FORMSPREE_ENDPOINT.includes('YOUR_FORMSPREE_ID')) {
       console.warn('[Z-Move] Formspree not configured. Replace YOUR_FORMSPREE_ID in FORMSPREE_ENDPOINT. Form submissions will fail.');
     }
@@ -1665,7 +1665,7 @@
           throw new Error('server');
         }
       } catch (_) {
-        errEl.textContent = 'Something went wrong. Please email hello@zmove.io directly.';
+        errEl.textContent = 'Something went wrong. Please email hello@zmove.click directly.';
         errEl.style.display = 'block';
         btn.disabled = false;
         btn.innerHTML = 'Send message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
