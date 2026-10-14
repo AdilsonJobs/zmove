@@ -1,0 +1,288 @@
+{
+  "en": {
+    "lang": "en",
+    "url": "https://zmove.click/",
+    "meta": {
+      "title": "Z-Move | Agentless VM migration for Zadara, AWS and Azure",
+      "description": "Move VMs between Zadara, AWS and Azure without agents, and know they boot before you switch. White-label for cloud providers and MSPs. 370+ migrations in production.",
+      "ogTitle": "Z-Move: move VMs between clouds, know they boot before you switch",
+      "ogDescription": "Agentless migration between Zadara, AWS and Azure, with a boot test in the destination and a white-label portal for cloud providers.",
+      "ogImage": "https://zmove.click/og-image.png",
+      "ogAlt": "Z-Move logo, the headline and the platform's session page for a completed migration",
+      "locale": "en_US",
+      "altLocale": "pt_PT"
+    },
+    "skip": "Skip to content",
+    "nav": { "label": "Main", "how": "How it works", "routes": "Routes", "providers": "For providers", "security": "Security", "pricing": "Pricing", "faq": "FAQ", "demo": "Book a demo", "lang": "Language", "home": "Z-Move, back to top", "menu": "Open menu", "close": "Close menu", "toDark": "Switch to the dark theme", "toLight": "Switch to the light theme" },
+    "hero": {
+      "eyebrow": "Agentless VM migration · Zadara · AWS · Azure",
+      "t1": "Move VMs between clouds.",
+      "t2": "Know they boot before you switch.",
+      "lead": "Z-Move copies each disk through the cloud APIs, adapts the operating system when the new cloud needs it, and starts a test VM that has to answer on SSH or RDP. Nothing is installed inside your VMs.",
+      "cta1": "Book a demo",
+      "cta2": "See how it works",
+      "alt": "Z-Move session page for a completed Azure to Zadara migration: 39.7 MB/s on average, boot test passed with SSH on port 22, 19m 40s in total.",
+      "c1": "Speed and bottleneck measured live: 39.7 MB/s, limited by the source.",
+      "c2": "Boot test passed: SSH answered on port 22 in 2m 28s.",
+      "c3": "Every phase timed: 19m 40s from start to finish.",
+      "cap": "Timings from a real Azure East US → Zadara run (30 GiB). Names from the demo environment."
+    },
+    "proofLabel": "Results",
+    "proof": [
+      { "n": "370+", "l": "migrations in production at a telecom operator" },
+      { "n": "94%", "l": "of those migrations completed" },
+      { "n": "19m 40s", "l": "Azure → Zadara, 30 GiB, start to finish" },
+      { "n": "0", "l": "agents to install in your VMs" }
+    ],
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Four steps. One screen.",
+      "lead": "Your team, or your customers, run every migration from the same wizard. No scripts, and no jumping between consoles.",
+      "steps": [
+        { "shot": "connect", "t": "Connect both clouds", "d": "Pick the direction and add access keys for the source and the destination. Keys are encrypted and deleted 30 days after the job ends.", "alt": "Migration wizard, source step: AWS US East (Ohio) region and access keys.", "cap": "Wizard · source · AWS US East (Ohio)" },
+        { "shot": "prechecks", "t": "Check before anything runs", "d": "Choose the VMs. Pre-checks confirm credentials, disks, operating system, image name and recent quota errors before a single worker starts.", "alt": "Pre-checks before launch: credentials, resource, OS compatibility, image name and quotas confirmed.", "cap": "Pre-checks · billing-api · ready to launch" },
+        { "shot": "session-live", "t": "Watch it move", "d": "Temporary workers copy every disk, in parallel. You see each phase, the speed, the time left and what is holding it back.", "alt": "Live session: 99.2 of 220 GiB copied at 97.6 MB/s, three disks in parallel, network as the bottleneck.", "cap": "Live session · erp-db · 3 disks in parallel" },
+        { "shot": "session-cleanup", "t": "Prove it, then clean up", "d": "A test VM starts in the destination and has to answer on SSH or RDP. Workers, snapshots and temporary volumes are deleted, and the list shows it.", "alt": "Session resources after the migration: workers terminated, snapshots and volumes deleted, image created.", "cap": "Session resources · web-01 · temporary resources removed" }
+      ]
+    },
+    "routes": {
+      "eyebrow": "Routes",
+      "title": "Where are you moving?",
+      "lead": "Pick a source and a destination. Every figure comes from a real run.",
+      "from": "From",
+      "to": "To",
+      "clouds": { "zadara": "Zadara", "aws": "AWS", "azure": "Azure" },
+      "k": { "how": "How it runs", "result": "You get", "measured": "Measured run", "os": "Operating system", "boot": "Boot test" },
+      "status": { "prod": "In production", "val": "Validated", "no": "Not supported yet" },
+      "ask": "Tell us about your route",
+      "same": "Z-Move moves workloads between clouds and between Zadara regions. Inside a single AWS or Azure account, use the provider's own tools.",
+      "none": "This route is not supported yet. Tell us if you need it.",
+      "data": {
+        "zadara>zadara": { "st": "prod", "how": "Relay. An export worker reads the source, an import worker writes the destination, and the disks stream between them in memory, over TLS.", "result": "An image in the destination region, ready to launch.", "m": [["21 GB", "2 disks"], ["6m 44s", "to transfer"], ["53 MB/s", "average speed"]], "note": "Production firewall VM, moved between two Zadara regions.", "os": "Nothing to adapt: the same platform on both sides.", "boot": "Available. The test VM has to answer on SSH, RDP, HTTPS or HTTP.", "bootOk": true },
+        "aws>zadara": { "st": "prod", "how": "Relay. A worker in AWS reads an EBS snapshot and streams it to an import worker in Zadara.", "result": "A Zadara image, ready to launch.", "m": [["8 GiB", "1 disk"], ["17m", "total time"], ["1m 21s", "until SSH answered"]], "note": "Validation run, AWS US East to Zadara, with boot test.", "os": "Linux boots as it is: the VirtIO drivers ship with the kernel. For Windows, check the VirtIO drivers before the cutover.", "boot": "Passed: SSH answered on port 22.", "bootOk": true },
+        "zadara>aws": { "st": "val", "how": "Relay. A worker in Zadara streams the disks to an import worker in AWS.", "result": "An AMI registered with ENA, ready for current instance types.", "m": [["20 GiB", "1 disk"], ["14m", "total time"], ["71 MB/s", "average speed"]], "note": "Validation run, Zadara to AWS US East.", "os": "Linux and Windows are copied block by block, as they are.", "boot": "Available on AWS.", "bootOk": true },
+        "azure>zadara": { "st": "val", "how": "Direct. One worker in Zadara reads the Azure snapshot itself, with nothing in the middle.", "result": "A Zadara image, with the system already adapted.", "m": [["30 GiB", "1 disk"], ["19m 40s", "total time"], ["39.7 MB/s", "average speed"]], "note": "Validation run, Azure East US to Zadara, Ubuntu 24.04.", "os": "Adapted automatically in 3 s: cloud-init, network (netplan), Azure agent and fstab.", "boot": "Passed: SSH answered in 2m 28s.", "bootOk": true },
+        "zadara>azure": { "st": "val", "how": "Direct upload. Only the parts of each disk that hold data are sent.", "result": "An Azure managed disk (Standard SSD). You create the VM from it in the Azure portal.", "m": [["20 GiB", "disk size"], ["2.3 GiB", "actually sent"], ["9m 07s", "total time"]], "note": "Validation run, Zadara to Azure East US, upload at 166 MB/s.", "os": "Adapted for Azure, with a check for the Hyper-V drivers.", "boot": "Not yet for Azure destinations. Start the VM in the portal to confirm.", "bootOk": false }
+      }
+    },
+    "prov": {
+      "eyebrow": "For cloud providers and MSPs",
+      "title": "Offer migration under your own brand.",
+      "lead": "Run Z-Move as your own migration service. Your customers move their workloads into your cloud by themselves, and you bill the usage at your price.",
+      "tagA": "Z-Move",
+      "tagB": "Your brand",
+      "drag": "Drag to compare the two brands",
+      "altA": "Z-Move overview dashboard in the default green brand.",
+      "altB": "The same dashboard rebranded as Acme Cloud, a fictional provider, in orange.",
+      "cap": "Drag to switch brands. Acme Cloud is a fictional example.",
+      "feats": [
+        "Your name, logo and color across the whole platform",
+        "Your regions and endpoints, ready for your customers",
+        "Self-service wizard with pre-checks, in English and Portuguese",
+        "Usage metered per GB and per customer, with CSV export",
+        "Each customer manages its own users, with MFA for administrators",
+        "Private deployment inside your own cloud"
+      ],
+      "quote": "A telecom operator runs Z-Move as its own Migration Service.",
+      "stats": [
+        { "n": "370+", "k": "migrations" },
+        { "n": "94%", "k": "completed" },
+        { "n": "8", "k": "routes, intercontinental included" }
+      ],
+      "cta": "Talk to us about a license"
+    },
+    "sec": {
+      "eyebrow": "Security",
+      "title": "Ready for your security review.",
+      "lead": "The questions your security team will ask, answered up front.",
+      "items": [
+        { "icon": "shield", "t": "Your VMs stay untouched", "d": "Z-Move only reads snapshots through the cloud APIs. The source is never stopped or changed, so rolling back means carrying on with it." },
+        { "icon": "key", "t": "Keys encrypted, then deleted", "d": "Cloud credentials are encrypted at rest, never written to logs, and deleted 30 days after the job ends." },
+        { "icon": "chip", "t": "Workers without secrets", "d": "Each temporary worker gets a token valid only for its job, opens no inbound ports and is destroyed at the end." },
+        { "icon": "lock", "t": "Encrypted in transit", "d": "TLS on every hop. Relayed disks stream in memory and are never written to disk. Azure routes go straight between the clouds." },
+        { "icon": "user", "t": "MFA and an audit log", "d": "Administrators sign in with a second factor. Every change is recorded: who, what, when and from where." },
+        { "icon": "server", "t": "Your own cloud, if you prefer", "d": "Run Z-Move inside your own infrastructure and keep every byte there." }
+      ]
+    },
+    "price": {
+      "eyebrow": "Pricing",
+      "title": "Pay for the data you move.",
+      "p1": { "name": "Pay as you go", "price": "US$0.05", "unit": "per GB copied", "desc": "For one-off migrations and teams that want full control of the cost.", "items": ["Billed on the data written to the destination, not on disk size", "A retry does not pay again for disks already copied", "Boot test, OS adaptation and cleanup included", "No setup fee and no subscription"], "cta": "Start with a demo" },
+      "p2": { "name": "Provider license", "price": "Annual", "unit": "priced by volume", "desc": "For cloud providers and MSPs that offer migration to their own customers.", "items": ["White-label and multi-tenant", "Private deployment in your cloud", "Usage reports per customer", "Onboarding, training and priority support"], "cta": "Talk to us" }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "The questions we hear most",
+      "lead": "Something else? Write to",
+      "items": [
+        { "q": "Do I need to install anything in my VMs?", "a": "No. Z-Move works with snapshots and volumes through the cloud APIs, using temporary workers that it creates and removes itself." },
+        { "q": "How much downtime should I plan for?", "a": "Z-Move copies a snapshot, so the source keeps running. For a consistent copy of a busy application, stop the application or the VM before the snapshot, and the downtime becomes the copy time of that VM. Between Zadara regions, replication keeps a standby up to date for shorter windows." },
+        { "q": "Which operating systems are supported?", "a": "Linux and Windows. Disks are copied block by block, so the system moves as it is. Linux VMs from Azure are adapted automatically. For Windows, check the destination's drivers before the cutover." },
+        { "q": "Does my data pass through your servers?", "a": "On Zadara ↔ Zadara and AWS ↔ Zadara routes, disks stream through the Z-Move relay over TLS, in memory, and are never written to disk. Azure routes go straight between the clouds. With a private deployment, everything stays in your infrastructure." },
+        { "q": "What happens if a migration fails?", "a": "The job log shows where and why. Workers are cleaned up and you retry from the same screen; disks already copied are reused and not billed again. The source is never touched, so a failure never puts it at risk." },
+        { "q": "Can I replicate or export instead of migrating?", "a": "Yes. Replication keeps a standby VM in another Zadara region in sync, every 30 minutes up to every 24 hours, with failover from the dashboard. Export writes a VM's disks as qcow2 or VHD to your own S3 bucket." }
+      ]
+    },
+    "cta": {
+      "eyebrow": "Demo",
+      "title": "See a full run, from wizard to boot test.",
+      "lead": "Book a demo and follow a complete migration: wizard, pre-checks, live session, boot test and cleanup.",
+      "alt": "Or write to",
+      "name": "Name",
+      "email": "Work email",
+      "company": "Company",
+      "msg": "What do you want to move?",
+      "msgPh": "For example: 40 VMs from Azure to our Zadara region",
+      "send": "Request a demo",
+      "privacy": "We only use these details to reply to you.",
+      "sending": "Sending...",
+      "ok": "Thank you. We will get back to you soon.",
+      "err": "The request did not go through. Please write to hello@zmove.click.",
+      "invalid": "Please add your name and a valid work email."
+    },
+    "foot": { "tag": "Agentless VM migration between Zadara, AWS and Azure.", "privacy": "Privacy", "terms": "Terms" }
+  },
+  "pt": {
+    "lang": "pt",
+    "url": "https://zmove.click/pt/",
+    "meta": {
+      "title": "Z-Move | Migração de VMs sem agentes para Zadara, AWS e Azure",
+      "description": "Mova VMs entre Zadara, AWS e Azure sem agentes e saiba que arrancam antes de mudar. White-label para fornecedores de cloud e MSPs. Mais de 370 migrações em produção.",
+      "ogTitle": "Z-Move: mova VMs entre clouds e saiba que arrancam antes de mudar",
+      "ogDescription": "Migração sem agentes entre Zadara, AWS e Azure, com teste de arranque no destino e um portal white-label para fornecedores de cloud.",
+      "ogImage": "https://zmove.click/og-image-pt.png",
+      "ogAlt": "Logótipo do Z-Move, o título e a página da sessão de uma migração concluída na plataforma",
+      "locale": "pt_PT",
+      "altLocale": "en_US"
+    },
+    "skip": "Saltar para o conteúdo",
+    "nav": { "label": "Principal", "how": "Como funciona", "routes": "Rotas", "providers": "Fornecedores", "security": "Segurança", "pricing": "Preços", "faq": "Perguntas", "demo": "Marcar demo", "lang": "Língua", "home": "Z-Move, voltar ao topo", "menu": "Abrir menu", "close": "Fechar menu", "toDark": "Mudar para o tema escuro", "toLight": "Mudar para o tema claro" },
+    "hero": {
+      "eyebrow": "Migração de VMs sem agentes · Zadara · AWS · Azure",
+      "t1": "Mova VMs entre clouds.",
+      "t2": "Saiba que arrancam antes de mudar.",
+      "lead": "O Z-Move copia cada disco pelas APIs das clouds, adapta o sistema operativo quando a nova cloud o exige e arranca uma VM de teste que tem de responder por SSH ou RDP. Nada é instalado dentro das suas VMs.",
+      "cta1": "Marcar demonstração",
+      "cta2": "Ver como funciona",
+      "alt": "Página da sessão no Z-Move de uma migração Azure para Zadara concluída: 39,7 MB/s de média, teste de arranque aprovado com SSH na porta 22, 19m 40s no total.",
+      "c1": "Velocidade e gargalo medidos ao vivo: 39,7 MB/s, limitados pela origem.",
+      "c2": "Teste de arranque aprovado: o SSH respondeu na porta 22 em 2m 28s.",
+      "c3": "Cada fase cronometrada: 19m 40s do início ao fim.",
+      "cap": "Tempos de uma migração real Azure East US → Zadara (30 GiB). Nomes do ambiente de demonstração."
+    },
+    "proofLabel": "Resultados",
+    "proof": [
+      { "n": "370+", "l": "migrações em produção numa operadora de telecomunicações" },
+      { "n": "94%", "l": "dessas migrações concluídas" },
+      { "n": "19m 40s", "l": "Azure → Zadara, 30 GiB, do início ao fim" },
+      { "n": "0", "l": "agentes a instalar nas suas VMs" }
+    ],
+    "how": {
+      "eyebrow": "Como funciona",
+      "title": "Quatro passos. Um só ecrã.",
+      "lead": "A sua equipa, ou os seus clientes, fazem cada migração no mesmo assistente. Sem scripts e sem saltar entre consolas.",
+      "steps": [
+        { "shot": "connect", "t": "Ligue as duas clouds", "d": "Escolha o sentido e introduza as chaves de acesso da origem e do destino. As chaves ficam cifradas e são apagadas 30 dias depois do fim do job.", "alt": "Assistente de migração, passo da origem: região AWS US East (Ohio) e chaves de acesso.", "cap": "Assistente · origem · AWS US East (Ohio)" },
+        { "shot": "prechecks", "t": "Verifique antes de arrancar", "d": "Escolha as VMs. As pré-verificações confirmam credenciais, discos, sistema operativo, nome da imagem e erros recentes de quota, antes de arrancar qualquer worker.", "alt": "Pré-verificações antes do lançamento: credenciais, recurso, compatibilidade do sistema, nome da imagem e quotas confirmados.", "cap": "Pré-verificações · billing-api · pronto a lançar" },
+        { "shot": "session-live", "t": "Acompanhe a cópia", "d": "Workers temporários copiam todos os discos em paralelo. Vê cada fase, a velocidade, o tempo que falta e o que está a limitar.", "alt": "Sessão ao vivo: 99,2 de 220 GiB copiados a 97,6 MB/s, três discos em paralelo, gargalo na rede.", "cap": "Sessão ao vivo · erp-db · 3 discos em paralelo" },
+        { "shot": "session-cleanup", "t": "Prove e depois limpe", "d": "Uma VM de teste arranca no destino e tem de responder por SSH ou RDP. Workers, snapshots e volumes temporários são apagados, e a lista mostra-o.", "alt": "Recursos da sessão depois da migração: workers terminados, snapshots e volumes apagados, imagem criada.", "cap": "Recursos da sessão · web-01 · temporários removidos" }
+      ]
+    },
+    "routes": {
+      "eyebrow": "Rotas",
+      "title": "Para onde vai mudar?",
+      "lead": "Escolha a origem e o destino. Todos os valores vêm de execuções reais.",
+      "from": "De",
+      "to": "Para",
+      "clouds": { "zadara": "Zadara", "aws": "AWS", "azure": "Azure" },
+      "k": { "how": "Como funciona", "result": "O que recebe", "measured": "Execução medida", "os": "Sistema operativo", "boot": "Teste de arranque" },
+      "status": { "prod": "Em produção", "val": "Validada", "no": "Ainda não suportada" },
+      "ask": "Fale-nos da sua rota",
+      "same": "O Z-Move muda workloads entre clouds e entre regiões Zadara. Dentro da mesma conta AWS ou Azure, use as ferramentas do próprio fornecedor.",
+      "none": "Esta rota ainda não é suportada. Diga-nos se precisa dela.",
+      "data": {
+        "zadara>zadara": { "st": "prod", "how": "Relay. Um worker de exportação lê a origem, um worker de importação escreve no destino, e os discos passam entre eles em memória, por TLS.", "result": "Uma imagem na região de destino, pronta a lançar.", "m": [["21 GB", "2 discos"], ["6m 44s", "de transferência"], ["53 MB/s", "velocidade média"]], "note": "VM de firewall em produção, mudada entre duas regiões Zadara.", "os": "Nada a adaptar: a mesma plataforma dos dois lados.", "boot": "Disponível. A VM de teste tem de responder por SSH, RDP, HTTPS ou HTTP.", "bootOk": true },
+        "aws>zadara": { "st": "prod", "how": "Relay. Um worker na AWS lê um snapshot EBS e envia-o a um worker de importação na Zadara.", "result": "Uma imagem Zadara, pronta a lançar.", "m": [["8 GiB", "1 disco"], ["17m", "tempo total"], ["1m 21s", "até o SSH responder"]], "note": "Execução de validação, AWS US East para Zadara, com teste de arranque.", "os": "Linux arranca tal como está: os drivers VirtIO vêm no kernel. Em Windows, confirme os drivers VirtIO antes da mudança.", "boot": "Aprovado: o SSH respondeu na porta 22.", "bootOk": true },
+        "zadara>aws": { "st": "val", "how": "Relay. Um worker na Zadara envia os discos a um worker de importação na AWS.", "result": "Uma AMI registada com ENA, pronta para os tipos de instância actuais.", "m": [["20 GiB", "1 disco"], ["14m", "tempo total"], ["71 MB/s", "velocidade média"]], "note": "Execução de validação, Zadara para AWS US East.", "os": "Linux e Windows são copiados bloco a bloco, tal como estão.", "boot": "Disponível na AWS.", "bootOk": true },
+        "azure>zadara": { "st": "val", "how": "Directo. Um worker na Zadara lê o snapshot do Azure, sem nada pelo meio.", "result": "Uma imagem Zadara, com o sistema já adaptado.", "m": [["30 GiB", "1 disco"], ["19m 40s", "tempo total"], ["39,7 MB/s", "velocidade média"]], "note": "Execução de validação, Azure East US para Zadara, Ubuntu 24.04.", "os": "Adaptado automaticamente em 3 s: cloud-init, rede (netplan), agente do Azure e fstab.", "boot": "Aprovado: o SSH respondeu em 2m 28s.", "bootOk": true },
+        "zadara>azure": { "st": "val", "how": "Envio directo. Só seguem as partes de cada disco que têm dados.", "result": "Um disco gerido do Azure (Standard SSD). A VM cria-se a partir dele no portal do Azure.", "m": [["20 GiB", "tamanho do disco"], ["2,3 GiB", "realmente enviados"], ["9m 07s", "tempo total"]], "note": "Execução de validação, Zadara para Azure East US, envio a 166 MB/s.", "os": "Adaptado para o Azure, com verificação dos drivers Hyper-V.", "boot": "Ainda não existe para destinos Azure. Arranque a VM no portal para confirmar.", "bootOk": false }
+      }
+    },
+    "prov": {
+      "eyebrow": "Para fornecedores de cloud e MSPs",
+      "title": "Ofereça migração com a sua marca.",
+      "lead": "Use o Z-Move como o seu próprio serviço de migração. Os seus clientes trazem os workloads para a sua cloud sozinhos, e o uso é facturado ao preço que definir.",
+      "tagA": "Z-Move",
+      "tagB": "A sua marca",
+      "drag": "Arraste para comparar as duas marcas",
+      "altA": "Painel de visão geral do Z-Move com a marca verde por omissão.",
+      "altB": "O mesmo painel com a marca Acme Cloud, um fornecedor fictício, a laranja.",
+      "cap": "Arraste para mudar de marca. A Acme Cloud é um exemplo fictício.",
+      "feats": [
+        "O seu nome, logótipo e cor em toda a plataforma",
+        "As suas regiões e endpoints, prontos para os clientes",
+        "Assistente self-service com pré-verificações, em português e inglês",
+        "Uso medido por GB e por cliente, com exportação CSV",
+        "Cada cliente gere os seus utilizadores, com MFA para administradores",
+        "Instalação privada dentro da sua própria cloud"
+      ],
+      "quote": "Uma operadora de telecomunicações usa o Z-Move como o seu próprio Migration Service.",
+      "stats": [
+        { "n": "370+", "k": "migrações" },
+        { "n": "94%", "k": "concluídas" },
+        { "n": "8", "k": "rotas, incluindo intercontinentais" }
+      ],
+      "cta": "Falar sobre uma licença"
+    },
+    "sec": {
+      "eyebrow": "Segurança",
+      "title": "Pronto para a sua revisão de segurança.",
+      "lead": "As perguntas que a sua equipa de segurança vai fazer, respondidas à partida.",
+      "items": [
+        { "icon": "shield", "t": "As suas VMs ficam intactas", "d": "O Z-Move só lê snapshots pelas APIs da cloud. A origem nunca é parada nem alterada, por isso voltar atrás é continuar com ela." },
+        { "icon": "key", "t": "Chaves cifradas e depois apagadas", "d": "As credenciais das clouds ficam cifradas, nunca vão para os logs e são apagadas 30 dias depois do fim do job." },
+        { "icon": "chip", "t": "Workers sem segredos", "d": "Cada worker temporário recebe um token válido só para o seu job, não abre portas de entrada e é destruído no fim." },
+        { "icon": "lock", "t": "Cifrado em trânsito", "d": "TLS em todos os troços. Os discos que passam pelo relay seguem em memória e nunca são escritos em disco. As rotas Azure vão directamente entre as clouds." },
+        { "icon": "user", "t": "MFA e registo de auditoria", "d": "Os administradores entram com um segundo factor. Cada alteração fica registada: quem, o quê, quando e de onde." },
+        { "icon": "server", "t": "Na sua cloud, se preferir", "d": "Instale o Z-Move na sua própria infraestrutura e mantenha lá cada byte." }
+      ]
+    },
+    "price": {
+      "eyebrow": "Preços",
+      "title": "Pague os dados que move.",
+      "p1": { "name": "Pagamento por uso", "price": "US$0,05", "unit": "por GB copiado", "desc": "Para migrações pontuais e equipas que querem controlar o custo.", "items": ["Cobrado pelos dados escritos no destino, não pelo tamanho do disco", "Uma nova tentativa não volta a pagar discos já copiados", "Teste de arranque, adaptação do sistema e limpeza incluídos", "Sem taxa de adesão e sem assinatura"], "cta": "Começar por uma demonstração" },
+      "p2": { "name": "Licença de fornecedor", "price": "Anual", "unit": "conforme o volume", "desc": "Para fornecedores de cloud e MSPs que oferecem migração aos seus clientes.", "items": ["White-label e multi-tenant", "Instalação privada na sua cloud", "Relatórios de uso por cliente", "Formação, arranque e suporte prioritário"], "cta": "Falar connosco" }
+    },
+    "faq": {
+      "eyebrow": "Perguntas",
+      "title": "As perguntas que mais ouvimos",
+      "lead": "Outra dúvida? Escreva para",
+      "items": [
+        { "q": "Tenho de instalar alguma coisa nas VMs?", "a": "Não. O Z-Move trabalha com snapshots e volumes pelas APIs das clouds, com workers temporários que cria e remove sozinho." },
+        { "q": "Quanto tempo de paragem devo prever?", "a": "O Z-Move copia um snapshot, por isso a origem continua a funcionar. Para uma cópia consistente de uma aplicação com muita escrita, pare a aplicação ou a VM antes do snapshot, e a paragem passa a ser o tempo de cópia dessa VM. Entre regiões Zadara, a replicação mantém uma VM de reserva actualizada para janelas mais curtas." },
+        { "q": "Que sistemas operativos são suportados?", "a": "Linux e Windows. Os discos são copiados bloco a bloco, por isso o sistema muda tal como está. As VMs Linux vindas do Azure são adaptadas automaticamente. Em Windows, confirme os drivers do destino antes da mudança." },
+        { "q": "Os meus dados passam pelos vossos servidores?", "a": "Nas rotas Zadara ↔ Zadara e AWS ↔ Zadara, os discos passam pelo relay do Z-Move, por TLS, em memória, e nunca são escritos em disco. As rotas Azure vão directamente entre as clouds. Com uma instalação privada, tudo fica na sua infraestrutura." },
+        { "q": "E se uma migração falhar?", "a": "O log do job mostra onde e porquê. Os workers são limpos e repete no mesmo ecrã; os discos já copiados são reaproveitados e não voltam a ser cobrados. A origem nunca é tocada, por isso uma falha nunca a põe em risco." },
+        { "q": "Posso replicar ou exportar em vez de migrar?", "a": "Sim. A replicação mantém uma VM de reserva sincronizada noutra região Zadara, de 30 em 30 minutos até de 24 em 24 horas, com failover no painel. A exportação escreve os discos de uma VM em qcow2 ou VHD no seu próprio bucket S3." }
+      ]
+    },
+    "cta": {
+      "eyebrow": "Demonstração",
+      "title": "Veja uma execução completa, do assistente ao teste de arranque.",
+      "lead": "Marque uma demonstração e acompanhe uma migração do princípio ao fim: assistente, pré-verificações, sessão ao vivo, teste de arranque e limpeza.",
+      "alt": "Ou escreva para",
+      "name": "Nome",
+      "email": "Email profissional",
+      "company": "Empresa",
+      "msg": "O que quer mudar?",
+      "msgPh": "Por exemplo: 40 VMs do Azure para a nossa região Zadara",
+      "send": "Pedir demonstração",
+      "privacy": "Só usamos estes dados para lhe responder.",
+      "sending": "A enviar...",
+      "ok": "Obrigado. Respondemos em breve.",
+      "err": "O pedido não seguiu. Escreva para hello@zmove.click.",
+      "invalid": "Indique o nome e um email profissional válido."
+    },
+    "foot": { "tag": "Migração de VMs sem agentes entre Zadara, AWS e Azure.", "privacy": "Privacidade", "terms": "Termos" }
+  }
+}
