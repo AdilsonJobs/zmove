@@ -30,12 +30,40 @@ customHttp.yml         cabeçalhos HTTP do Amplify (CSP, HSTS, etc.)
 3. Ver localmente: `python3 -m http.server 8089` e abrir http://localhost:8089/ e /pt/.
 4. Commit e push para `main`: o Amplify publica em cerca de um minuto.
 
-## Capturas e logótipo
+## Capturas
 
 As capturas vêm da plataforma actual num ambiente de demonstração com dados neutros (VMs, regiões e
 empresa inventadas; os tempos são de execuções reais). "Acme Cloud" é uma marca fictícia, usada para
-mostrar o white-label. O logótipo é o Z desenhado como uma rota: estação de origem, a mudança e o destino,
-no verde da plataforma (#0A7A63); a palavra é IBM Plex Sans SemiBold convertida em contornos.
+mostrar o white-label. Cada ecrã existe em EN e PT, claro e escuro, em 2880 px e 1440 px; a página
+escolhe a variante pela língua, pelo tema e pelo ecrã do visitante.
+
+## Marca (logótipo e favicon)
+
+O Z desenhado como uma rota: o anel é a estação de origem, a diagonal é a mudança e o ponto cheio é o
+destino, no verde da plataforma (#0A7A63). A palavra é IBM Plex Sans SemiBold convertida em contornos,
+com o hífen em verde (#0A7A63) em fundo claro e em menta (#3DC2A3) em fundo escuro. A plataforma
+(https://copy.zmove.click) usa a mesma marca e o mesmo favicon desde 14/10/2026.
+
+| Ficheiro | Uso |
+|---|---|
+| `assets/brand/zmove-logo.svg` / `.png` | logótipo para fundo claro |
+| `assets/brand/zmove-logo-on-dark.svg` / `.png` | logótipo para fundo escuro |
+| `assets/brand/zmove-mark.svg` | só o símbolo |
+| `assets/brand/icon-192.png`, `icon-512.png` | ícones do `site.webmanifest` |
+| `favicon.svg`, `favicon.ico` | favicon (traço mais grosso, legível a 16 px) |
+| `apple-touch-icon.png` | ícone para iPhone e iPad (quadrado inteiro; o iOS arredonda os cantos) |
+| `og-image.png`, `og-image-pt.png` | imagem de partilha (LinkedIn, WhatsApp) em EN e PT, 1200 x 630 |
+
+No cabeçalho e no rodapé o símbolo está desenhado no próprio HTML (`mark()` em `src/build.py`) e a
+palavra é texto em IBM Plex, para ficar nítida e sem pedidos extra.
+
+## Verificar antes do push
+
+Ver as duas línguas em desktop e telemóvel, nos temas claro e escuro, e confirmar que: não há scroll
+horizontal; as capturas correspondem à língua e ao tema; os passos, o seletor de rotas, o comparador de
+marca, o tema e o menu funcionam; a consola do browser não mostra erros nem violações de CSP; as
+páginas antigas (`/blog/`, `/case-studies/...`, `/compare/...`) redireccionam. Não submeter o
+formulário em testes: vai para o Formspree real.
 
 ## Formulário e estatísticas
 
