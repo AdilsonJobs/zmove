@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How to Migrate VMs from AWS to Zadara — Complete Agentless Guide | Z-Move</title>
   <meta name="description" content="Step-by-step guide to migrating virtual machines from AWS to Zadara using Z-Move's agentless engine. No agents, no downtime, $0.05/GB. Real production example included." />
-  <link rel="canonical" href="https://zmove.io/blog/how-to-migrate-vms-from-aws-to-zadara/" />
+  <link rel="canonical" href="https://zmove.click/blog/how-to-migrate-vms-from-aws-to-zadara/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="How to Migrate VMs from AWS to Zadara — Complete Agentless Guide" />
   <meta property="og:description" content="Step-by-step walkthrough of migrating AWS EC2 instances to Zadara with Z-Move. Agentless, fast, $0.05/GB." />
-  <meta property="og:url" content="https://zmove.io/blog/how-to-migrate-vms-from-aws-to-zadara/" />
-  <meta property="og:image" content="https://zmove.io/og-image.png" />
+  <meta property="og:url" content="https://zmove.click/blog/how-to-migrate-vms-from-aws-to-zadara/" />
+  <meta property="og:image" content="https://zmove.click/og-image.png" />
   <meta property="article:published_time" content="2026-04-18" />
   <meta property="article:author" content="Adilson Camenha" />
-  <script defer data-domain="zmove.io" src="https://plausible.io/js/script.js"></script>
+  <script defer data-domain="zmove.click" src="https://plausible.io/js/script.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -22,9 +22,9 @@
     "headline": "How to Migrate VMs from AWS to Zadara — Complete Agentless Guide",
     "description": "Step-by-step guide to migrating virtual machines from AWS to Zadara using Z-Move's agentless engine.",
     "author": { "@type": "Person", "name": "Adilson Camenha", "url": "https://www.linkedin.com/in/adilsoncamenha" },
-    "publisher": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.io" },
+    "publisher": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.click" },
     "datePublished": "2026-04-18",
-    "url": "https://zmove.io/blog/how-to-migrate-vms-from-aws-to-zadara/"
+    "url": "https://zmove.click/blog/how-to-migrate-vms-from-aws-to-zadara/"
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -83,6 +83,9 @@
     .btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 13px 28px; border-radius: 10px; font-size: .95rem; font-weight: 700; background: linear-gradient(135deg, var(--blue), #8b5cf6); color: #fff; text-decoration: none; }
     footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--muted); font-size: .8rem; }
     footer a { color: var(--blue); text-decoration: none; }
+      /* O bloco de código tem scroll próprio: antes alargava o passo e a página no telemóvel */
+    .step-body { min-width: 0; }
+    .code-block pre { overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -114,7 +117,7 @@
 
     <p>Moving workloads from AWS to Zadara used to mean weeks of planning, agent installations, and manual disk conversions. With Z-Move's agentless engine, the same migration takes minutes to set up and hours to complete — with zero software deployed inside your VMs.</p>
 
-    <p>This is a real production walkthrough. The migration below is from <strong>AWS US East (Ohio)</strong> to <strong>Zadara Luanda 02</strong>, performed for Angola Cables. It completed in <strong>3 minutes 20 seconds</strong> for a lightweight instance. Enterprise workloads with larger disks take longer, but the process is identical.</p>
+    <p>This is a real production walkthrough. The migration below is from <strong>AWS US East (Ohio)</strong> to <strong>Zadara Luanda 02</strong>, performed for a telecom operator. It completed in <strong>3 minutes 20 seconds</strong> for a lightweight instance. Enterprise workloads with larger disks take longer, but the process is identical.</p>
 
     <div class="metric-row">
       <div class="metric-box"><div class="metric-val">0</div><div class="metric-lbl">Agents installed</div></div>
@@ -142,7 +145,7 @@
     </ul>
 
     <div class="callout warning">
-      <p>⚠️ <strong>Recommendation:</strong> Always test with a non-production workload first. While Z-Move has a 100% success rate across 30 production migrations, it's good practice to validate your specific configuration before migrating critical systems.</p>
+      <p><strong>Recommendation:</strong> Always test with a non-production workload first. While Z-Move runs in production with 370+ migrations and a 94% success rate, it's good practice to validate your specific configuration before migrating critical systems.</p>
     </div>
 
     <h2>Step-by-step: AWS → Zadara migration</h2>
@@ -178,10 +181,9 @@
           <div class="code-block">
             <div class="code-block-header">
               <span style="color:#ff5f57">●</span><span style="color:#febc2e">●</span><span style="color:#28c840">●</span>
-              &nbsp; zmove — job #28 · aws-us-east-1 → zadara-luanda-02
+              &nbsp; z-move · job log #28 · AWS US East (Ohio) → Zadara Luanda 02
             </div>
-            <pre><span class="t-m">$</span> <span class="t-b">zmove</span> start --source aws-ohio-01 --target zadara-luanda-02
-<span class="t-m">────────────────────────────────────────────────</span>
+            <pre><span class="t-m">────────────────────────────────────────────────</span>
 <span class="t-g">✓</span> Source auth · AWS US East (Ohio)
 <span class="t-g">✓</span> Target auth · Zadara Luanda 02
 <span class="t-y">⟳</span> Provisioning ephemeral workers<span class="t-m">...</span>

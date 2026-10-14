@@ -5,23 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Z-Move vs Zadara V2Z vs Cirrus Data — Zadara Migration Tool Comparison</title>
   <meta name="description" content="Comparing every way to migrate workloads to Zadara: Z-Move, Zadara V2Z, Cirrus Data, and Zadara's manual method. Which is right for your environment?" />
-  <link rel="canonical" href="https://zmove.io/compare/zmove-vs-zadara-migration-tools/" />
+  <link rel="canonical" href="https://zmove.click/compare/zmove-vs-zadara-migration-tools/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Z-Move vs Zadara V2Z vs Cirrus Data — Zadara Migration Tool Comparison" />
   <meta property="og:description" content="Every way to migrate to Zadara compared side-by-side: Z-Move, V2Z, Cirrus Data, manual qemu-img method. Which fits your workload?" />
-  <meta property="og:url" content="https://zmove.io/compare/zmove-vs-zadara-migration-tools/" />
-  <script defer data-domain="zmove.io" src="https://plausible.io/js/script.js"></script>
+  <meta property="og:url" content="https://zmove.click/compare/zmove-vs-zadara-migration-tools/" />
+  <script defer data-domain="zmove.click" src="https://plausible.io/js/script.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "Z-Move vs Zadara V2Z vs Cirrus Data — Zadara Migration Tool Comparison",
     "description": "Complete comparison of migration tools for moving workloads to Zadara: Z-Move, Zadara V2Z, Cirrus Data, and manual methods.",
-    "author": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.io" },
-    "publisher": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.io" },
+    "author": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.click" },
+    "publisher": { "@type": "Organization", "name": "Z-Move", "url": "https://zmove.click" },
     "datePublished": "2026-04-18",
-    "url": "https://zmove.io/compare/zmove-vs-zadara-migration-tools/"
+    "url": "https://zmove.click/compare/zmove-vs-zadara-migration-tools/"
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -151,7 +151,7 @@
     <div class="tools-grid">
       <div class="tool-card zmove">
         <div class="tool-name">Z-Move</div>
-        <div class="tool-maker">by Z-Move (zmove.io)</div>
+        <div class="tool-maker">by Z-Move (zmove.click)</div>
         <div class="tool-desc">Agentless cloud VM migration engine. Moves VMs between Zadara, AWS, and Azure using cloud APIs and ephemeral workers. $0.05/GB.</div>
         <span class="tool-badge badge-blue">Any cloud → Zadara</span>
         <span class="tool-badge badge-blue">Zadara → Any cloud</span>
@@ -198,7 +198,7 @@
         </tr>
         <tr>
           <td>VM downtime required</td>
-          <td class="zmove-val"><span class="check">✓</span> <strong>No downtime during transfer</strong> <span class="badge-win">Z-Move wins</span></td>
+          <td class="zmove-val"><span class="check">✓</span> <strong>Source keeps running during the copy</strong> (snapshot-based)</td>
           <td><span class="partial">~</span> Snapshot-based (brief quiesce)</td>
           <td><span class="check">✓</span> Near-zero downtime</td>
           <td><span class="cross">✗</span> <strong>VM must be stopped</strong></td>
@@ -288,7 +288,7 @@
 
     <div class="tool-profile zmove">
       <h3>Z-Move</h3>
-      <div class="by">by Z-Move · zmove.io · $0.05/GB</div>
+      <div class="by">by Z-Move · zmove.click · $0.05/GB</div>
       <p>Z-Move operates entirely at the cloud API layer. It authenticates with your source and target clouds, provisions ephemeral workers to handle the data transfer, streams disks in parallel, and destroys all infrastructure after the job completes. No software is installed inside your VMs.</p>
       <div class="tp-grid">
         <div class="tp-col">
@@ -396,7 +396,7 @@
     <h2>Which tool for which scenario?</h2>
 
     <div class="callout">
-      <p>💡 <strong>Moving from AWS or Azure to Zadara?</strong> V2Z doesn't support these sources. The manual method requires downtime. Z-Move is the only API-native, no-downtime option for cloud-to-Zadara migrations.</p>
+      <p><strong>Moving from AWS or Azure to Zadara?</strong> V2Z doesn't support these sources and the manual method requires downtime. Z-Move migrates them through the cloud APIs, without agents, while the source keeps running, and can boot-test the result before the cutover.</p>
     </div>
 
     <h3>Scenario 1: AWS EC2 → Zadara zCompute</h3>
@@ -422,7 +422,7 @@
       <li><strong>Cirrus Data</strong> solves storage migrations, not VM-to-VM cloud moves.</li>
       <li><strong>Z-Move</strong> fills the gap: cloud-native, agentless, any direction.</li>
     </ul>
-    <p>If you're running production workloads on AWS or Azure and want to evaluate Zadara — for cost, sovereignty, or performance reasons — Z-Move is currently the only purpose-built tool that handles that migration path without agents, without downtime, and with transparent per-GB pricing.</p>
+    <p>If you're running production workloads on AWS or Azure and want to evaluate Zadara — for cost, sovereignty, or performance reasons — Z-Move is purpose-built for that path: no agents, the source keeps running during the copy, every migration can be boot-tested, and pricing is a transparent $0.05 per GB.</p>
 
     <div class="cta-box">
       <h3>Ready to migrate to Zadara?</h3>
@@ -434,7 +434,7 @@
       <span style="font-size:.82rem;color:var(--muted);align-self:center;">Related:</span>
       <a href="/compare/zmove-vs-aws-mgn/" class="related-link">Z-Move vs AWS MGN</a>
       <a href="/blog/how-to-migrate-vms-from-aws-to-zadara/" class="related-link">AWS → Zadara migration guide</a>
-      <a href="/case-studies/angola-cables-aws-zadara/" class="related-link">Case study: AWS → Zadara in 3 minutes</a>
+      <a href="/case-studies/telecom-aws-to-zadara/" class="related-link">Case study: AWS → Zadara in 3 minutes</a>
       <a href="/case-studies/united-investment-sap-hana/" class="related-link">Case study: SAP HANA migration</a>
     </div>
   </div>
